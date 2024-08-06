@@ -50,10 +50,6 @@
 bool                powerSavingMode   = false;
 const unsigned long POWER_SAVING_TIME = 60 * 15; // in seconds
 
-#if defined(ARDUINO_ARCH_RP2040)
-extern MFEEPROM MFeeprom;
-#endif
-
 #if MF_MUX_SUPPORT == 1
 MFMuxDriver MUX;
 #endif
