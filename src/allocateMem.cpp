@@ -6,7 +6,7 @@
 
 #include "mobiflight.h"
 
-#if defined (ARDUINO_ARCH_AVR)
+#if defined (ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_MEGAAVR)
 uint8_t     deviceBuffer[MF_MAX_DEVICEMEM] = {0};
 #else
 std::size_t    deviceBuffer[MF_MAX_DEVICEMEM] = {0};
@@ -14,7 +14,7 @@ std::size_t    deviceBuffer[MF_MAX_DEVICEMEM] = {0};
 
 uint16_t nextPointer                    = 0;
 
-#if defined (ARDUINO_ARCH_AVR)
+#if defined (ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_MEGAAVR)
 uint8_t     *allocateMemory(uint16_t size)
 #else
 std::size_t    *allocateMemory(uint16_t size)

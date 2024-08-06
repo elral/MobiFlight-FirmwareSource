@@ -8,7 +8,7 @@
 
 #include <new>
 
-#if defined (ARDUINO_ARCH_AVR)
+#if defined (ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_MEGAAVR)
 uint8_t     *allocateMemory(uint16_t size);
 #else
 std::size_t    *allocateMemory(uint16_t size);
