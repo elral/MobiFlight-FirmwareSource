@@ -7,9 +7,9 @@
 #include "mobiflight.h"
 #include "MFEEPROM.h"
 #include "Button.h"
-#include "Encoder.h"
+#include "./MF_Encoder/Encoder.h"     // otherwise Teensy specific Encoder lib is used
 #include "Output.h"
-#if defined(ARDUINO_ARCH_RP2040)
+#if defined(ARDUINO_ARCH_RP2040) || defined(CORE_TEENSY)
 #include "ArduinoUniqueID.h"
 #endif
 
@@ -69,7 +69,7 @@ const uint8_t MEM_OFFSET_CONFIG = MEM_OFFSET_NAME + MEM_LEN_NAME + MEM_LEN_SERIA
 
 #if defined(ARDUINO_ARCH_AVR)
 char serial[11] = MOBIFLIGHT_SERIAL; // 3 characters for "SN-",7 characters for "xyz-zyx" plus terminating NULL
-#elif defined(ARDUINO_ARCH_RP2040)
+#elif defined(ARDUINO_ARCH_RP2040) || defined(CORE_TEENSY)
 char serial[3 + UniqueIDsize * 2 + 1] = MOBIFLIGHT_SERIAL; // 3 characters for "SN-", UniqueID as HEX String, terminating NULL
 #endif
 char           name[MEM_LEN_NAME]              = MOBIFLIGHT_NAME;
@@ -633,7 +633,7 @@ void generateRandomSerial()
     cmdMessenger.sendCmd(kDebug, F("Serial number generated"));
 }
 
-#if defined(ARDUINO_ARCH_RP2040)
+#if defined(ARDUINO_ARCH_RP2040) || defined(CORE_TEENSY)
 void readUniqueSerial()
 {
     serial[0] = 'S';
@@ -667,7 +667,7 @@ void generateSerial(bool force)
     if (MFeeprom.read_byte(MEM_OFFSET_SERIAL) == 'I' && MFeeprom.read_byte(MEM_OFFSET_SERIAL + 1) == 'D') {
 #if defined(ARDUINO_ARCH_AVR)
         generateRandomSerial();
-#elif defined(ARDUINO_ARCH_RP2040)
+#elif defined(ARDUINO_ARCH_RP2040) || defined(CORE_TEENSY)
         readUniqueSerial();
 #endif
         return;
@@ -681,7 +681,7 @@ void generateSerial(bool force)
     // and getting the command to send the info's to the connector is always the same.
     // additional double check if it's really a new board, should reduce Jaimes problem
     generateRandomSerial();
-#elif defined(ARDUINO_ARCH_RP2040)
+#elif defined(ARDUINO_ARCH_RP2040) || defined(CORE_TEENSY)
     // Read the uniqueID for Pico's and use it as serial number
     readUniqueSerial();
     // mark this in the eeprom that a UniqueID is used on first start up for Pico's
