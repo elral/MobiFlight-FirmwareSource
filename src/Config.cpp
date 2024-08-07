@@ -609,8 +609,15 @@ bool getStatusConfig()
 // ************************************************************
 // serial number handling
 // ************************************************************
+
+// Generate a serial number only for AVR's
+#if defined(ARDUINO_ARCH_AVR)
 void generateRandomSerial()
 {
+    // To have not always the same starting point for the random generator, millis() are
+    // used as starting point. It is very unlikely that the time between flashing the firmware
+    // and getting the command to send the info's to the connector is always the same.
+    // additional double check if it's really a new board, should reduce Jaimes problem
     randomSeed(millis());
     serial[0]             = 'S';
     serial[1]             = 'N';
@@ -630,8 +637,11 @@ void generateRandomSerial()
         randomSerial >>= 4;
     }
     MFeeprom.write_block(MEM_OFFSET_SERIAL, serial, MEM_LEN_SERIAL);
+#ifdef DEBUG2CMDMESSENGER
     cmdMessenger.sendCmd(kDebug, F("Serial number generated"));
+#endif
 }
+#endif
 
 #if defined(ARDUINO_ARCH_RP2040)
 void readUniqueSerial()
@@ -652,44 +662,37 @@ void generateSerial(bool force)
 {
     if (force) {
         // A serial number is forced to generate
-        // generate a serial number acc. the old style also for the Pico
+        // generate a serial number acc. the old style only for AVR's
+#if defined(ARDUINO_ARCH_AVR)
         generateRandomSerial();
+#elif defined(ARDUINO_ARCH_RP2040)
+        // For Pico always the UniqueID is used.
+        readUniqueSerial();
+        // If there is always a serial number acc. old style and the user
+        // requests a new one, he will get the UniqueID and it's marked in the EEPROM
+        if (MFeeprom.read_byte(MEM_OFFSET_SERIAL) == 'S' && MFeeprom.read_byte(MEM_OFFSET_SERIAL + 1) == 'N') {
+            MFeeprom.write_byte(MEM_OFFSET_CONFIG, 0x00);
+        }
+#endif
         return;
     }
 
     // A serial number according old style is already generated and saved to the eeprom
+    // For Pico this is kept for backwards compatibility
     if (MFeeprom.read_byte(MEM_OFFSET_SERIAL) == 'S' && MFeeprom.read_byte(MEM_OFFSET_SERIAL + 1) == 'N') {
         MFeeprom.read_block(MEM_OFFSET_SERIAL, serial, MEM_LEN_SERIAL);
         return;
     }
 
-    // A uniqueID is already generated and saved to the eeprom
-    if (MFeeprom.read_byte(MEM_OFFSET_SERIAL) == 'I' && MFeeprom.read_byte(MEM_OFFSET_SERIAL + 1) == 'D') {
 #if defined(ARDUINO_ARCH_AVR)
-        generateRandomSerial();
-#elif defined(ARDUINO_ARCH_RP2040)
-        readUniqueSerial();
-#endif
-        return;
-    }
-
-    // Coming here no UniqueID and no serial number is available, so it's the first start up of a board
-#if defined(ARDUINO_ARCH_AVR)
-    // Generate a serial number for AVR's
-    // To have not always the same starting point for the random generator, millis() are
-    // used as starting point. It is very unlikely that the time between flashing the firmware
-    // and getting the command to send the info's to the connector is always the same.
-    // additional double check if it's really a new board, should reduce Jaimes problem
+    // Coming here no serial number is available (so it's the first start up of an AVR board)
+    // or a uniqueID is already generated and saved to the eeprom
+    // AVR's are forced to roll back to "old style" serial number
     generateRandomSerial();
 #elif defined(ARDUINO_ARCH_RP2040)
-    // Read the uniqueID for Pico's and use it as serial number
+    // Pico always uses the UniqueID
     readUniqueSerial();
-    // mark this in the eeprom that a UniqueID is used on first start up for Pico's
-    MFeeprom.write_block(MEM_OFFSET_SERIAL, "ID", 2);
 #endif
-    if (MFeeprom.read_byte(MEM_OFFSET_CONFIG) == 0xFF) {
-        MFeeprom.write_block(MEM_OFFSET_CONFIG, 0x00);
-    }
 }
 
 void OnGenNewSerial()
