@@ -671,7 +671,7 @@ void generateSerial(bool force)
         // If there is always a serial number acc. old style and the user
         // requests a new one, he will get the UniqueID and it's marked in the EEPROM
         if (MFeeprom.read_byte(MEM_OFFSET_SERIAL) == 'S' && MFeeprom.read_byte(MEM_OFFSET_SERIAL + 1) == 'N') {
-            MFeeprom.write_byte(MEM_OFFSET_CONFIG, 0x00);
+            MFeeprom.write_byte(MEM_OFFSET_SERIAL, 0x00);
         }
 #endif
         return;
