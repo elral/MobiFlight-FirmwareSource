@@ -16,10 +16,10 @@
       "ForceResetOnFirmwareUpdate": true,
       "MessageSize": 64
     },
-    "HardwareIds": ["^VID_303A&PID_1001"],
+    "HardwareIds": ["^VID_1A86&PID_55D3"],
     "Info": {
       "CanInstallFirmware": true,
-      "FriendlyName": "ESP32-S3 LilyGO",
+      "FriendlyName": "ESP32-S3 DevKitC1",
       "LatestFirmwareVersion": "2.3.0",
       "MobiFlightType": "MobiFlight ESP32-S3 DevKitC1"
     },
