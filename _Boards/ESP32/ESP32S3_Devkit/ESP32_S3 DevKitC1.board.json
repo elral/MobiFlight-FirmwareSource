@@ -1,7 +1,7 @@
 {
     "$schema": "./mfboard.schema.json",
     "AvrDudeSettings": {
-      "Device": "ESP32-S3 LilyGO",
+      "Device": "ESP32-S3 DevKitC1",
       "BaudRate": "115200",
       "Programmer": "arduino",
       "FirmwareBaseName": "mobiflight_raspberrypico",
