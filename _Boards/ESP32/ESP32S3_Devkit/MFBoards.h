@@ -1,5 +1,4 @@
-#ifndef MFBoardMicro_h
-#define MFBoardMicro_h
+#pragma once
 
 #ifndef MF_SEGMENT_SUPPORT
 #define MF_SEGMENT_SUPPORT 1
@@ -30,6 +29,9 @@
 #define MF_DIGIN_MUX_SUPPORT 1
 #endif
 
+#ifndef MOBIFLIGHT_TYPE
+#define MOBIFLIGHT_TYPE         "MobiFlight ESP32-S3 DevKitC1"
+#endif
 #ifndef MOBIFLIGHT_SERIAL
 #define MOBIFLIGHT_SERIAL       "0987654321"
 #endif
@@ -44,6 +46,4 @@
 #endif
 #ifndef MF_MAX_DEVICEMEM
 #define MF_MAX_DEVICEMEM        1000    // max. memory size for devices
-#endif
-
 #endif
