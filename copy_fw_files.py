@@ -14,7 +14,7 @@ build_path = './_build'
 build_path_fw = build_path + '/firmware'
 build_path_json = build_path + '/Boards'
 distrubution_path = './_dist'
-board_folder = ['./_Boards/Atmel', './_Boards/RaspberryPi']
+board_folder = ['./_Boards/Atmel', './_Boards/RaspberryPi', './_Boards/ESP32']
 platform = env.BoardConfig().get("platform", {})
 
 def copy_fw_files (source, target, env):
@@ -30,6 +30,7 @@ def copy_fw_files (source, target, env):
 
     if platform == "espressif32":
         merge_bin(source, target, env)
+        fw_file_name=fw_file_name[0:-4] + "_merged.bin"
 
     # Copy build FW file
     shutil.copy(fw_file_name, build_path_fw)
