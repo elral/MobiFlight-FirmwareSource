@@ -34,7 +34,7 @@
 #define MOBIFLIGHT_SERIAL       "0987654321"
 #endif
 #ifndef MOBIFLIGHT_NAME
-#define MOBIFLIGHT_NAME         "MobiFlight ESP32-S3 LilyGO"
+#define MOBIFLIGHT_NAME         "MobiFlight ESP32-S3 DevKitC1"
 #endif
 #ifndef MEMLEN_CONFIG
 #define MEMLEN_CONFIG           1496    // MUST be less than EEPROM_SIZE!! MEM_OFFSET_CONFIG + MEM_LEN_CONFIG <= EEPROM_SIZE, see: eeprom_write_block (MEM_OFFSET_CONFIG, configBuffer, MEM_LEN_CONFIG);
