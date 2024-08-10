@@ -16,7 +16,7 @@
       "ForceResetOnFirmwareUpdate": true,
       "MessageSize": 64
     },
-    "HardwareIds": ["^VID_1A86&PID_55D3"],
+    "HardwareIds": ["^VID_303A&PID_1001"],
     "Info": {
       "CanInstallFirmware": true,
       "FriendlyName": "ESP32-S3 DevKitC1",
