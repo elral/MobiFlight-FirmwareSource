@@ -4,7 +4,6 @@
     "Device": "ESP32-S3 DevKitC1",
     "BaudRate": "115200",
     "Programmer": "arduino",
-    "FirmwareBaseName": "mobiflight_raspberrypico",
     "Timeout": 15000
   },
   "Connection": {
@@ -17,13 +16,18 @@
     "MessageSize": 64
   },
   "HardwareIds": [
-    "^VID_303A&PID_1001"
+    "^VID_303A&PID_1001",
+    "^VID_303A\\+PID_1001\\+.+"
   ],
   "Info": {
     "CanInstallFirmware": true,
+    "CanResetBoard": true,
+    "FirmwareBaseName": "mobiflight_esp32s3",
+    "FirmwareExtension": "bin",
     "FriendlyName": "ESP32-S3 DevKitC1",
-    "LatestFirmwareVersion": "2.3.0",
-    "MobiFlightType": "MobiFlight ESP32-S3 DevKitC1"
+    "LatestFirmwareVersion": "2.5.1",
+    "MobiFlightType": "MobiFlight ESP32-S3 DevKitC1",
+    "ResetFirmwareFile": "reset.raspberry_pico_flash_nuke.uf2"
   },
   "ModuleLimits": {
     "MaxAnalogInputs": 18,
