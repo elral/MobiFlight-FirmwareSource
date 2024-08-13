@@ -4,9 +4,7 @@
 #if defined(ARDUINO_ARCH_RP2040) && defined(USE_2ND_CORE)
 #include <FreeRTOS.h>
 #endif
-#if defined(ARDUINO_ARCH_ESP32) && defined(USE_2ND_CORE)
-#include "core0.h"
-#endif
+
 /* **********************************************************************************
     Normally nothing has to be changed in this file
     It handles one or multiple custom devices
