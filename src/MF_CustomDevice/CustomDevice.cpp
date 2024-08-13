@@ -21,6 +21,13 @@ namespace CustomDevice
     uint8_t         maxCustomDevices       = 0;
 #if defined(USE_2ND_CORE)
     char payload[SERIAL_RX_BUFFER_SIZE];
+#if defined(ARDUINO_ARCH_ESP32)
+    // For communication with 2nd core of ESP32
+    volatile bool command2ndCore;
+    uint8_t       customDevice2ndCore = 0;
+    int16_t       messageID2ndCore    = 0;
+    char         *payload2ndCore;
+#endif
 #endif
 
     bool setupArray(uint16_t count)
@@ -105,7 +112,14 @@ namespace CustomDevice
         rp2040.fifo.push(messageID);
         rp2040.fifo.push((uint32_t)&payload);
 #elif defined(ARDUINO_ARCH_ESP32) && defined(USE_2ND_CORE)
-
+        // copy the message, could get be overwritten from the next message while processing on 2nd core
+        strncpy(payload, output, SERIAL_RX_BUFFER_SIZE);
+        // Wait for 2nd core
+        while (command2ndCore) {}
+        customDevice2ndCore = device;
+        messageID2ndCore    = messageID;
+        payload2ndCore      = payload;
+        command2ndCore      = true;
 #else
         customDevice[device].set(messageID, output); // send the string to your custom device
 #endif
@@ -182,6 +196,49 @@ void loop1()
             lastMillis = millis();
         }
 #endif
+    }
+}
+#endif
+
+#if defined(ARDUINO_ARCH_ESP32) && defined(USE_2ND_CORE)
+TaskHandle_t loop1Handle;
+void         loop1(void *parameter);
+
+void setup1()
+{
+    BaseType_t xReturned = xTaskCreatePinnedToCore(
+        loop1,          /* Function to implement the task */
+        "CustomDevice", /* Name of the task */
+        10000,          /* Stack size in words */
+        NULL,           /* Task input parameter */
+        0,              /* Priority of the task 0/1/2 = low/normal/high */
+        &loop1Handle,   /* Task handle. */
+        0               /* Core where the task should run */
+    );
+}
+
+void loop1(void *parameter)
+{
+#ifdef MF_CUSTOMDEVICE_POLL_MS
+    uint32_t lastMillis = 0;
+#endif
+    while (1) {
+#if defined(MF_CUSTOMDEVICE_HAS_UPDATE)
+#ifdef MF_CUSTOMDEVICE_POLL_MS
+        if (millis() - lastMillis >= MF_CUSTOMDEVICE_POLL_MS) {
+#endif
+            for (int i = 0; i != CustomDevice::customDeviceRegistered; i++) {
+                CustomDevice::customDevice[i].update();
+            }
+#ifdef MF_CUSTOMDEVICE_POLL_MS
+            lastMillis = millis();
+        }
+#endif
+#endif
+        if (CustomDevice::command2ndCore) {
+            CustomDevice::customDevice[CustomDevice::customDevice2ndCore].set(CustomDevice::messageID2ndCore, CustomDevice::payload2ndCore);
+            CustomDevice::command2ndCore = 0;
+        }
     }
 }
 #endif

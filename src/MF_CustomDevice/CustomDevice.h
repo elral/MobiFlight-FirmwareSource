@@ -9,3 +9,7 @@ namespace CustomDevice
     void OnSet();
     void PowerSave(bool state);
 }
+
+#if defined(ARDUINO_ARCH_ESP32) && defined(USE_2ND_CORE)
+    void setup1();
+#endif
