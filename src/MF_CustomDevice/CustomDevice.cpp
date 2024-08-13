@@ -240,23 +240,3 @@ void loop1(void *parameter)
     }
 }
 #endif
-
-#if defined(ARDUINO_ARCH_ESP32) && defined(USE_2ND_CORE)
-void setup1()
-{
-}
-
-void loop1()
-{
-#ifdef MF_CUSTOMDEVICE_POLL_MS
-    if (millis() - lastMillis >= MF_CUSTOMDEVICE_POLL_MS) {
-#endif
-        for (int i = 0; i != CustomDevice::customDeviceRegistered; i++) {
-            CustomDevice::customDevice[i].update();
-        }
-#ifdef MF_CUSTOMDEVICE_POLL_MS
-        lastMillis = millis();
-    }
-#endif
-}
-#endif
