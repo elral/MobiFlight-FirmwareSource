@@ -1,10 +1,12 @@
 #include "mobiflight.h"
 #include "CustomDevice.h"
 #include "MFCustomDevice.h"
-#if defined(USE_2ND_CORE)
+#if defined(ARDUINO_ARCH_RP2040) && defined(USE_2ND_CORE)
 #include <FreeRTOS.h>
 #endif
-
+#if defined(ARDUINO_ARCH_ESP32) && defined(USE_2ND_CORE)
+#include "core0.h"
+#endif
 /* **********************************************************************************
     Normally nothing has to be changed in this file
     It handles one or multiple custom devices
@@ -92,7 +94,7 @@ namespace CustomDevice
         int16_t messageID = cmdMessenger.readInt16Arg();  // get the messageID number
         char   *output    = cmdMessenger.readStringArg(); // get the pointer to the new raw string
         cmdMessenger.unescape(output);                    // and unescape the string if escape characters are used
-#if defined(USE_2ND_CORE)
+#if defined(ARDUINO_ARCH_RP2040) && defined(USE_2ND_CORE)
         // copy the message, could get be overwritten from the next message while processing on 2nd core
         strncpy(payload, output, SERIAL_RX_BUFFER_SIZE);
         // wait for 2nd core
@@ -102,6 +104,8 @@ namespace CustomDevice
         rp2040.fifo.push(device);
         rp2040.fifo.push(messageID);
         rp2040.fifo.push((uint32_t)&payload);
+#elif defined(ARDUINO_ARCH_ESP32) && defined(USE_2ND_CORE)
+
 #else
         customDevice[device].set(messageID, output); // send the string to your custom device
 #endif
@@ -117,14 +121,14 @@ namespace CustomDevice
     {
         for (uint8_t i = 0; i < customDeviceRegistered; ++i) {
             if (state)
-                customDevice[i].set(MESSAGEID_POWERSAVINGMODE, (char*)"1");
+                customDevice[i].set(MESSAGEID_POWERSAVINGMODE, (char *)"1");
             else
-                customDevice[i].set(MESSAGEID_POWERSAVINGMODE, (char*)"0");
+                customDevice[i].set(MESSAGEID_POWERSAVINGMODE, (char *)"0");
         }
     }
 } // end of namespace
 
-#if defined(USE_2ND_CORE)
+#if defined(ARDUINO_ARCH_RP2040) && defined(USE_2ND_CORE)
 /* **********************************************************************************
     This will run the set() function from the custom device on the 2nd core
     Be aware NOT to use the function calls from the Pico SDK!
@@ -154,7 +158,7 @@ void loop1()
         // needs some idle time. If it is not used the 1st core stops when
         // writing to the EEPROM which stops the 2nd core
         delayMicroseconds(1);
-#endif  
+#endif
 #ifdef MF_CUSTOMDEVICE_POLL_MS
         if (millis() - lastMillis >= MF_CUSTOMDEVICE_POLL_MS) {
 #endif
@@ -173,12 +177,31 @@ void loop1()
                     // send ready for next message to 1st core
                     rp2040.fifo.push(true);
                 }
-
             }
 #ifdef MF_CUSTOMDEVICE_POLL_MS
             lastMillis = millis();
         }
 #endif
     }
+}
+#endif
+
+#if defined(ARDUINO_ARCH_ESP32) && defined(USE_2ND_CORE)
+void setup1()
+{
+}
+
+void loop1()
+{
+#ifdef MF_CUSTOMDEVICE_POLL_MS
+    if (millis() - lastMillis >= MF_CUSTOMDEVICE_POLL_MS) {
+#endif
+        for (int i = 0; i != CustomDevice::customDeviceRegistered; i++) {
+            CustomDevice::customDevice[i].update();
+        }
+#ifdef MF_CUSTOMDEVICE_POLL_MS
+        lastMillis = millis();
+    }
+#endif
 }
 #endif

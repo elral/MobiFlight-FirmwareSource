@@ -6,6 +6,13 @@
 
 #pragma once
 
+#include "mobiflight.h"
+#if defined(ARDUINO_ARCH_ESP32) && defined(STEPPER_ON_2ND_CORE)
+#include "Stepper.h"
+#endif
+#if defined(ARDUINO_ARCH_ESP32) && defined(USE_2ND_CORE)
+#include "CustomDevice.h"
+#endif
 #include <EEPROM.h>
 
 class MFEEPROM
@@ -44,7 +51,7 @@ public:
     {
         if (adr + sizeof(T) > _eepromLength) return false;
         EEPROM.put(adr, t);
-#if defined(ARDUINO_ARCH_RP2040)|| defined(ARDUINO_ARCH_ESP32)
+#if defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_ARCH_ESP32)
         EEPROM.commit();
 #endif
         return true;
@@ -57,7 +64,7 @@ public:
         for (uint16_t i = 0; i < len; i++) {
             EEPROM.put(adr + i, t[i]);
         }
-#if defined(ARDUINO_ARCH_RP2040)|| defined(ARDUINO_ARCH_ESP32)
+#if defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_ARCH_ESP32)
         EEPROM.commit();
 #endif
         return true;
