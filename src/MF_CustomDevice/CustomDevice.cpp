@@ -98,10 +98,11 @@ namespace CustomDevice
         if (device >= customDeviceRegistered)            // if this device is not registered
             return;                                      // do nothing
         int16_t messageID = cmdMessenger.readInt16Arg(); // get the messageID number
-        if (cmdMessenger.available())                    // messageID for Shutdown has no argument
+        if (messageID != -1) {                           // messageID for Shutdown has no argument
             output = cmdMessenger.readStringArg();       // get the pointer to the new raw string
-        else
+        } else {
             output = (char *)"";
+        }
         cmdMessenger.unescape(output); // and unescape the string if escape characters are used
 #if defined(ARDUINO_ARCH_RP2040) && defined(USE_2ND_CORE)
         // copy the message, could get be overwritten from the next message while processing on 2nd core
