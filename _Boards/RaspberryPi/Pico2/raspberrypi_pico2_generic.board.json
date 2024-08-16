@@ -17,7 +17,7 @@
   "Info": {
     "CanInstallFirmware": true,
     "CanResetBoard": true,
-    "FirmwareBaseName": "mobiflight_raspberrypico",
+    "FirmwareBaseName": "mobiflight_raspberrypico2_generic",
     "FirmwareExtension": "uf2",
     "FriendlyName": "Raspberry Pico2 generic",
     "LatestFirmwareVersion": "2.5.1",
