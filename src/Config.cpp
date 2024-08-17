@@ -68,9 +68,9 @@ const uint8_t MEM_LEN_SERIAL    = 11;
 const uint8_t MEM_OFFSET_CONFIG = MEM_OFFSET_NAME + MEM_LEN_NAME + MEM_LEN_SERIAL;
 
 #if defined(ARDUINO_ARCH_AVR)
-char serial[11] = MOBIFLIGHT_SERIAL; // 3 characters for "SN-",7 characters for "xyz-zyx" plus terminating NULL
+char serial[11]; // 3 characters for "SN-",7 characters for "xyz-zyx" plus terminating NULL
 #elif defined(ARDUINO_ARCH_RP2040)
-char serial[3 + UniqueIDsize * 2 + 1] = MOBIFLIGHT_SERIAL; // 3 characters for "SN-", UniqueID as HEX String, terminating NULL
+char serial[3 + UniqueIDsize * 2 + 1]; // 3 characters for "SN-", UniqueID as HEX String, terminating NULL
 #endif
 char           name[MEM_LEN_NAME]              = MOBIFLIGHT_NAME;
 const int      MEM_LEN_CONFIG                  = MEMLEN_CONFIG;
