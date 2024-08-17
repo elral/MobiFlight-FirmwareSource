@@ -693,8 +693,10 @@ void OnGenNewSerial()
 // ************************************************************
 void storeName()
 {
-    MFeeprom.write_byte(MEM_OFFSET_NAME, '#');
-    MFeeprom.write_block(MEM_OFFSET_NAME + 1, name, MEM_LEN_NAME - 1);
+    if (configLengthFlash != 0) {
+        MFeeprom.write_byte(MEM_OFFSET_NAME, '#');
+        MFeeprom.write_block(MEM_OFFSET_NAME + 1, name, MEM_LEN_NAME - 1);
+    }
 }
 
 void restoreName()
@@ -708,8 +710,10 @@ void restoreName()
 void OnSetName()
 {
     char *cfg = cmdMessenger.readStringArg();
-    memcpy(name, cfg, MEM_LEN_NAME);
-    storeName();
+    if (configLengthFlash != 0) {
+        memcpy(name, cfg, MEM_LEN_NAME);
+        storeName();
+    }
     cmdMessenger.sendCmd(kStatus, name);
 }
 
