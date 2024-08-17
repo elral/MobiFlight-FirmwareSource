@@ -5,6 +5,7 @@
 //
 
 #include "MFOutputShifter.h"
+#include "MFShiftData.h"
 #include "allocateMem.h"
 
 MFOutputShifter::MFOutputShifter()
@@ -79,7 +80,7 @@ void MFOutputShifter::update()
 {
     digitalWrite(_latchPin, LOW);
     for (uint8_t i = _moduleCount; i > 0; i--) {
-        shiftOut(_dataPin, _clockPin, MSBFIRST, _lastState[i - 1]); // LSBFIRST, MSBFIRST,
+        shiftOutData(_dataPin, _clockPin, MSBFIRST, _lastState[i - 1]); // LSBFIRST, MSBFIRST,
     }
     digitalWrite(_latchPin, HIGH);
 }
