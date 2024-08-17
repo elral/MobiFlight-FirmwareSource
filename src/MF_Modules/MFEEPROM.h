@@ -44,7 +44,7 @@ public:
     {
         if (adr + sizeof(T) > _eepromLength) return false;
         EEPROM.put(adr, t);
-#if defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_ARCH_RP2350)
+#if !defined(ARDUINO_ARCH_AVR)
         EEPROM.commit();
 #endif
         return true;
@@ -57,7 +57,7 @@ public:
         for (uint16_t i = 0; i < len; i++) {
             EEPROM.put(adr + i, t[i]);
         }
-#if defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_ARCH_RP2350)
+#if !defined(ARDUINO_ARCH_AVR)
         EEPROM.commit();
 #endif
         return true;
