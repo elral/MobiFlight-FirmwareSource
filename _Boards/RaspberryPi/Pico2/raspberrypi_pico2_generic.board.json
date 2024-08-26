@@ -13,7 +13,7 @@
     "ForceResetOnFirmwareUpdate": true,
     "MessageSize": 64
   },
-  "HardwareIds": ["^VID_2E8A&PID_0005"],
+  "HardwareIds": ["^VID_2E8A&PID_F00F"],
   "Info": {
     "CanInstallFirmware": true,
     "CanResetBoard": true,
@@ -177,7 +177,6 @@
       "isPWM": false,
       "Pin": 22
     },
-    ,
     {
       "isAnalog": false,
       "isI2C": false,
