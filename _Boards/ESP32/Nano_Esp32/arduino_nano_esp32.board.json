@@ -19,12 +19,12 @@
     "Info": {
         "CanInstallFirmware": true,
         "CanResetBoard": true,
-        "FirmwareBaseName": "mobiflight_nano_esp32",
+        "FirmwareBaseName": "mobiflight_nano_esp32_merged",
         "FirmwareExtension": "bin",
         "FriendlyName": "MobiFlight Nano ESP32",
-        "LatestFirmwareVersion": "2.4.1",
+        "LatestFirmwareVersion": "2.5.1",
         "MobiFlightType": "MobiFlight Nano ESP32",
-        "ResetFirmwareFile": "reset.nano_esp32.bin"
+        "ResetFirmwareFile": "reset.nano_esp32_merged.bin"
     },
     "ModuleLimits": {
         "MaxAnalogInputs": 8,
