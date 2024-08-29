@@ -12,7 +12,7 @@ MFEEPROM::MFEEPROM() {}
 
 void MFEEPROM::init(void)
 {
-#if defined(ARDUINO_ARCH_RP2040)
+#if !defined(ARDUINO_ARCH_AVR)
     EEPROM.begin(4096);
 #endif
     _eepromLength = EEPROM.length();
