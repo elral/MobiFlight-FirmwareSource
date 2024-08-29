@@ -9,7 +9,7 @@
 #include "Button.h"
 #include "Encoder.h"
 #include "Output.h"
-#if defined(ARDUINO_ARCH_RP2040)
+#if !defined(ARDUINO_ARCH_AVR)
 #include "ArduinoUniqueID.h"
 #endif
 
@@ -69,7 +69,7 @@ const uint8_t MEM_OFFSET_CONFIG = MEM_OFFSET_NAME + MEM_LEN_NAME + MEM_LEN_SERIA
 
 #if defined(ARDUINO_ARCH_AVR)
 char serial[11]; // 3 characters for "SN-",7 characters for "xyz-zyx" plus terminating NULL
-#elif defined(ARDUINO_ARCH_RP2040)
+#else
 char serial[3 + UniqueIDsize * 2 + 1]; // 3 characters for "SN-", UniqueID as HEX String, terminating NULL
 #endif
 char           name[MEM_LEN_NAME]              = MOBIFLIGHT_NAME;
@@ -643,7 +643,7 @@ void generateRandomSerial()
 }
 #endif
 
-#if defined(ARDUINO_ARCH_RP2040)
+#if !defined(ARDUINO_ARCH_AVR)
 void readUniqueSerial()
 {
     serial[0] = 'S';
@@ -665,8 +665,8 @@ void generateSerial(bool force)
         // generate a serial number acc. the old style only for AVR's
 #if defined(ARDUINO_ARCH_AVR)
         generateRandomSerial();
-#elif defined(ARDUINO_ARCH_RP2040)
-        // For Pico always the UniqueID is used.
+#else
+        // For other boards always the UniqueID is used.
         readUniqueSerial();
         // If there is always a serial number acc. old style and the user
         // requests a new one, he will get the UniqueID and it's marked in the EEPROM
@@ -678,7 +678,7 @@ void generateSerial(bool force)
     }
 
     // A serial number according old style is already generated and saved to the eeprom
-    // For Pico this is kept for backwards compatibility
+    // For other boards this is kept for backwards compatibility
     if (MFeeprom.read_byte(MEM_OFFSET_SERIAL) == 'S' && MFeeprom.read_byte(MEM_OFFSET_SERIAL + 1) == 'N') {
         MFeeprom.read_block(MEM_OFFSET_SERIAL, serial, MEM_LEN_SERIAL);
         return;
@@ -689,8 +689,8 @@ void generateSerial(bool force)
     // or a uniqueID is already generated and saved to the eeprom
     // AVR's are forced to roll back to "old style" serial number
     generateRandomSerial();
-#elif defined(ARDUINO_ARCH_RP2040)
-    // Pico always uses the UniqueID
+#else
+    // other boards always uses the UniqueID
     readUniqueSerial();
 #endif
 }
