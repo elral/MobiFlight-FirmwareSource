@@ -32,7 +32,7 @@ def copy_fw_files (source, target, env):
         merge_bin(source, target, env)
         old_name = fw_file_name[0:-4] + "_merged.bin"
         fw_file_name = fw_file_name[0:-9]  + "merged_" + firmware_version.replace(".", "_") + ".bin"
-        os.rename(old_name, fw_file_name)
+        os.replace(old_name, fw_file_name)
 
     # Copy build FW file
     shutil.copy(fw_file_name, build_path_fw)
