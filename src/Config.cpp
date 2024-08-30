@@ -122,22 +122,20 @@ void OnSetConfig()
 #ifdef DEBUG2CMDMESSENGER
     cmdMessenger.sendCmd(kDebug, F("Setting config start"));
 #endif
-    // For now a config can only be saved if NO config in flash is available
-    // otherwise a config from flash would be sent from the connector
-    // and saved in the EEPROM, so the config get's doubled
-    if (configLengthFlash == 0) {
-        char   *cfg    = cmdMessenger.readStringArg();
-        uint8_t cfgLen = strlen(cfg);
+    // A config can be in flash or in EEPROM, bur only one must be used
+    // Once a config is in EEPROM, this config will be loaded and reported to the connector
+    // If no config is in EEPROM, the config from flash will be used if available
+    // This ensures backwards compatibility if a board gets updated with a config in flash
+    // but also have a user config in EEPROM
+    char   *cfg    = cmdMessenger.readStringArg();
+    uint8_t cfgLen = strlen(cfg);
 
-        if (configLengthEEPROM + cfgLen + 1 < MEM_LEN_CONFIG) {
-            MFeeprom.write_block(MEM_OFFSET_CONFIG + configLengthEEPROM, cfg, cfgLen + 1); // save the received config string including the terminatung NULL (+1) to EEPROM
-            configLengthEEPROM += cfgLen;
-            cmdMessenger.sendCmd(kStatus, configLengthEEPROM);
-        } else
-            cmdMessenger.sendCmd(kStatus, -1); // last successfull saving block is already NULL terminated, nothing more todo
-    } else {
+    if (configLengthEEPROM + cfgLen + 1 < MEM_LEN_CONFIG) {
+        MFeeprom.write_block(MEM_OFFSET_CONFIG + configLengthEEPROM, cfg, cfgLen + 1); // save the received config string including the terminatung NULL (+1) to EEPROM
+        configLengthEEPROM += cfgLen;
         cmdMessenger.sendCmd(kStatus, configLengthEEPROM);
-    }
+    } else
+        cmdMessenger.sendCmd(kStatus, -1); // last successfull saving block is already NULL terminated, nothing more todo
 #ifdef DEBUG2CMDMESSENGER
     cmdMessenger.sendCmd(kDebug, F("Setting config end"));
 #endif
@@ -353,17 +351,15 @@ void InitArrays(uint8_t *numberDevices)
 void readConfig()
 {
     uint8_t numberDevices[kTypeMax] = {0};
-    if (configLengthFlash > 0) {
-        GetArraySizes(numberDevices, true);
-    }
     if (configLengthEEPROM > 0) {
         GetArraySizes(numberDevices, false);
+    } else if (configLengthFlash > 0) {
+        GetArraySizes(numberDevices, true);
     }
     InitArrays(numberDevices);
     if (configLengthFlash > 0) {
         readConfigFromMemory(true);
-    }
-    if (configLengthEEPROM > 0) {
+    } else if (configLengthEEPROM > 0) {
         readConfigFromMemory(false);
     }
 }
@@ -565,22 +561,16 @@ void readConfigFromMemory(bool configFromFlash)
 
 void OnGetConfig()
 {
-    bool sentFromFlash = false;
     cmdMessenger.sendCmdStart(kInfo);
-    if (configLengthFlash > 0) {
+    if (configLengthEEPROM > 0) {
+        cmdMessenger.sendCmdArg((char)MFeeprom.read_byte(MEM_OFFSET_CONFIG));
+        for (uint16_t i = 1; i < configLengthEEPROM; i++) {
+            cmdMessenger.sendArg((char)MFeeprom.read_byte(MEM_OFFSET_CONFIG + i));
+        }
+    } else if (configLengthFlash > 0) {
         cmdMessenger.sendCmdArg((char)pgm_read_byte_near(CustomDeviceConfig));
         for (uint16_t i = 1; i < (configLengthFlash - 1); i++) {
             cmdMessenger.sendArg((char)pgm_read_byte_near(CustomDeviceConfig + i));
-        }
-        sentFromFlash = true;
-    }
-    if (configLengthEEPROM > 0) {
-        if (sentFromFlash)
-            cmdMessenger.sendArg((char)MFeeprom.read_byte(MEM_OFFSET_CONFIG));
-        else
-            cmdMessenger.sendCmdArg((char)MFeeprom.read_byte(MEM_OFFSET_CONFIG));
-        for (uint16_t i = 1; i < configLengthEEPROM; i++) {
-            cmdMessenger.sendArg((char)MFeeprom.read_byte(MEM_OFFSET_CONFIG + i));
         }
     }
     cmdMessenger.sendCmdEnd();
@@ -706,8 +696,10 @@ void OnGenNewSerial()
 // ************************************************************
 void storeName()
 {
-    MFeeprom.write_byte(MEM_OFFSET_NAME, '#');
-    MFeeprom.write_block(MEM_OFFSET_NAME + 1, name, MEM_LEN_NAME - 1);
+    if (configLengthFlash != 0) {
+        MFeeprom.write_byte(MEM_OFFSET_NAME, '#');
+        MFeeprom.write_block(MEM_OFFSET_NAME + 1, name, MEM_LEN_NAME - 1);
+    }
 }
 
 void restoreName()
@@ -721,8 +713,10 @@ void restoreName()
 void OnSetName()
 {
     char *cfg = cmdMessenger.readStringArg();
-    memcpy(name, cfg, MEM_LEN_NAME);
-    storeName();
+    if (configLengthFlash != 0) {
+        memcpy(name, cfg, MEM_LEN_NAME);
+        storeName();
+    }
     cmdMessenger.sendCmd(kStatus, name);
 }
 
