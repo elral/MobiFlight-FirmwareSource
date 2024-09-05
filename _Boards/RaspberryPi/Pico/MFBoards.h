@@ -29,6 +29,14 @@
 #define MF_MUX_SUPPORT       1
 #define MF_DIGIN_MUX_SUPPORT 1
 #endif
+#ifndef MF_KEYMATRIX_SUPPORT
+#define MF_KEYMATRIX_SUPPORT 1
+#endif
+#ifndef MAX_KEYMATRIX
+#define MAX_KEYMATRIX        1
+#define MAX_COLUMN_KEYMATRIX 8
+#define MAX_ROW_KEYMATRIX    8
+#endif
 
 #ifndef MOBIFLIGHT_TYPE
 #define MOBIFLIGHT_TYPE         "MobiFlight RaspiPico"
