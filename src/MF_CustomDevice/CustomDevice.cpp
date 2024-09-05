@@ -240,7 +240,6 @@ void loop1(void *parameter)
             lastMillis = millis();
         }
 #endif
-#endif
         if (CustomDevice::command2ndCore) {
             CustomDevice::customDevice[CustomDevice::customDevice2ndCore].set(CustomDevice::messageID2ndCore, CustomDevice::payload2ndCore);
             CustomDevice::command2ndCore = 0;
