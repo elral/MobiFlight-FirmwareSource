@@ -35,7 +35,7 @@ namespace InputShifter
     uint8_t Add(uint8_t latchPin, uint8_t clockPin, uint8_t dataPin, uint8_t modules, char const *name)
     {
         if (inputShifterRegistered == maxInputShifter)
-            return;
+            return 0xFF;
         inputShifter[inputShifterRegistered] = MFInputShifter();
         if (!inputShifter[inputShifterRegistered].attach(latchPin, clockPin, dataPin, modules, name)) {
             cmdMessenger.sendCmd(kStatus, F("InputShifter array does not fit into Memory"));
