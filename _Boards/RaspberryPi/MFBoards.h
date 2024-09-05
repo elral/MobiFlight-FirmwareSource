@@ -1,9 +1,3 @@
-//
-// MFBoards.h (Arduino ProMicro)
-//
-// (C) MobiFlight Project 2022
-//
-
 #ifndef MFBoardMicro_h
 #define MFBoardMicro_h
 
@@ -28,9 +22,6 @@
 #ifndef MF_INPUT_SHIFTER_SUPPORT
 #define MF_INPUT_SHIFTER_SUPPORT 1
 #endif
-#ifndef MF_KEYMATRIX_SUPPORT
-#define MF_KEYMATRIX_SUPPORT 1
-#endif
 #ifndef MF_MUX_SUPPORT
 #define MF_MUX_SUPPORT 1
 #endif
@@ -38,31 +29,21 @@
 #define MF_MUX_SUPPORT       1
 #define MF_DIGIN_MUX_SUPPORT 1
 #endif
-#ifndef MF_KEYMATRIX_SUPPORT
-#define MF_KEYMATRIX_SUPPORT 1
-#endif
-#ifndef MAX_KEYMATRIX
-#define MAX_KEYMATRIX        1
-#define MAX_COLUMN_KEYMATRIX 8
-#define MAX_ROW_KEYMATRIX    8
-#endif
 
 #ifndef MOBIFLIGHT_TYPE
-#define MOBIFLIGHT_TYPE     "MobiFlight Micro"
+#define MOBIFLIGHT_TYPE         "MobiFlight RaspiPico"
 #endif
 #ifndef MOBIFLIGHT_NAME
-#define MOBIFLIGHT_NAME     "MobiFlight Micro"
+#define MOBIFLIGHT_NAME         "MobiFlight RaspiPico"
 #endif
 #ifndef MEMLEN_CONFIG
-#define MEMLEN_CONFIG       440  // max. size for config which wil be stored in EEPROM
+#define MEMLEN_CONFIG           1496    // MUST be less than EEPROM_SIZE!! MEM_OFFSET_CONFIG + MEM_LEN_CONFIG <= EEPROM_SIZE, see: eeprom_write_block (MEM_OFFSET_CONFIG, configBuffer, MEM_LEN_CONFIG);
 #endif
 #ifndef MEMLEN_NAMES_BUFFER
-#define MEMLEN_NAMES_BUFFER 350  // max. size for configBuffer, contains only names from inputs
+#define MEMLEN_NAMES_BUFFER     1000    // max. size for configBuffer, contains only names from inputs
 #endif
 #ifndef MF_MAX_DEVICEMEM
-#define MF_MAX_DEVICEMEM    470  // max. memory size for devices
+#define MF_MAX_DEVICEMEM        1000    // max. memory size for devices
 #endif
 
 #endif
-
-// MFBoards.h
