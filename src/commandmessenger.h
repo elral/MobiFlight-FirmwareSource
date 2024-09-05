@@ -45,8 +45,9 @@ enum {
     kDigInMuxChange,       // 30
     kSetStepperSpeedAccel, // 31
     kSetCustomDevice,      // 32
-    kSetAnalogCalibration, // 33
-    kReadAnalogCalibration,// 34
+    kSetModuleSingleSegment, // 33
+    kSetAnalogCalibration, // 34
+    kReadAnalogCalibration,// 35
     kDebug = 0xFF          // 255
 };
 
