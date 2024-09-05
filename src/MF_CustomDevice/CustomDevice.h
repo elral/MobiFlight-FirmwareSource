@@ -13,7 +13,7 @@ namespace CustomDevice
 #if defined(STEPPER_ON_2ND_CORE) && defined(ARDUINO_ARCH_RP2040)
     void stopUpdate2ndCore(bool stop);
 #endif
+}
 #if defined(ARDUINO_ARCH_ESP32) && defined(USE_2ND_CORE)
     void setup1();
 #endif
-}
