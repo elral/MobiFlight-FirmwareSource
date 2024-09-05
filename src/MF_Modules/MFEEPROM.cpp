@@ -16,7 +16,7 @@ MFEEPROM::MFEEPROM() {}
 
 void MFEEPROM::init(void)
 {
-#if defined(ARDUINO_ARCH_RP2040)
+#if (!defined(ARDUINO_ARCH_AVR) && !defined(ARDUINO_ARCH_STM32))
     EEPROM.begin(4096);
 #endif
 #if defined(ARDUINO_ARCH_STM32)
@@ -51,12 +51,4 @@ bool MFEEPROM::write_byte(uint16_t adr, const uint8_t data)
     return true;
 }
 
-void MFEEPROM::commit() {
-#if defined(ARDUINO_ARCH_RP2040)
-    EEPROM.commit();
-#endif
-#if defined(ARDUINO_ARCH_STM32)
-    eeprom_buffer_flush();
-#endif
-}
 // MFEEPROM.cpp

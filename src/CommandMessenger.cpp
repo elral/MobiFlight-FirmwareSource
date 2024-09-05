@@ -56,6 +56,7 @@ void attachCommandCallbacks()
     cmdMessenger.attach(kInitModule, LedSegment::OnInitModule);
     cmdMessenger.attach(kSetModule, LedSegment::OnSetModule);
     cmdMessenger.attach(kSetModuleBrightness, LedSegment::OnSetModuleBrightness);
+    cmdMessenger.attach(kSetModuleSingleSegment, LedSegment::OnSetModuleSingleSegment);
 #endif
 
     cmdMessenger.attach(kSetPin, Output::OnSet);
@@ -152,7 +153,7 @@ void OnTrigger()
 
 void JumpToBootloader(void)
 {
-#if defined(ARDUINO_ARCH_STM32)
+#if defined(ARDUINO_NUCLEO_L496ZG)
      HAL_SuspendTick();
 
      /* Clear Interrupt Enable Register & Interrupt Pending Register */
