@@ -7,7 +7,7 @@
 #include "mobiflight.h"
 #include "MFStepper.h"
 #include "Stepper.h"
-#if defined(ARDUINO_ARCH_RP2040) && defined(STEPPER_ON_2ND_CORE)
+#if defined(STEPPER_ON_2ND_CORE) && defined(ARDUINO_ARCH_RP2040)
 #include <FreeRTOS.h>
 #endif
 
@@ -21,7 +21,8 @@ namespace Stepper
         FUNC_MOVETO = 1,
         FUNC_ZETZERO,
         FUNC_SPEEDACCEL,
-        FUNC_RESET
+        FUNC_RESET,
+        START_STOP_2ND_CORE
     };
 #if defined(ARDUINO_ARCH_ESP32)
     // For communication with 2nd core of ESP32
@@ -79,7 +80,7 @@ namespace Stepper
 
         if (stepper >= steppersRegistered)
             return;
-#if defined(ARDUINO_ARCH_RP2040) && defined(STEPPER_ON_2ND_CORE)
+#if defined(STEPPER_ON_2ND_CORE) && defined(ARDUINO_ARCH_RP2040)
         // wait for 2nd core
         rp2040.fifo.pop();
         rp2040.fifo.push(FUNC_MOVETO);
@@ -127,7 +128,7 @@ namespace Stepper
 
         if (stepper >= steppersRegistered)
             return;
-#if defined(ARDUINO_ARCH_RP2040) && defined(STEPPER_ON_2ND_CORE)
+#if defined(STEPPER_ON_2ND_CORE) && defined(ARDUINO_ARCH_RP2040)
         // wait for 2nd core
         rp2040.fifo.pop();
         rp2040.fifo.push(FUNC_ZETZERO);
@@ -152,7 +153,7 @@ namespace Stepper
 
         if (stepper >= steppersRegistered)
             return;
-#if defined(ARDUINO_ARCH_RP2040) && defined(STEPPER_ON_2ND_CORE)
+#if defined(STEPPER_ON_2ND_CORE) && defined(ARDUINO_ARCH_RP2040)
         rp2040.fifo.pop(); // wait for 2nd core
         rp2040.fifo.push(FUNC_SPEEDACCEL);
         rp2040.fifo.push(stepper);
@@ -187,9 +188,24 @@ namespace Stepper
         }
     }
 
+#if defined(STEPPER_ON_2ND_CORE) && defined(ARDUINO_ARCH_RP2040)
+    void stopUpdate2ndCore(bool stop)
+    {
+        // wait for 2nd core
+        rp2040.fifo.pop();
+        // send command to stop/start updating to 2nd core
+        rp2040.fifo.push(START_STOP_2ND_CORE);
+        // communication is always done using 4 messages
+        rp2040.fifo.push(0);
+        rp2040.fifo.push(stop);
+        rp2040.fifo.push(0);
+        // wait for execution of command
+        rp2040.fifo.pop();
+    }
+#endif
 } // namespace
 
-#if defined(ARDUINO_ARCH_RP2040) && defined(STEPPER_ON_2ND_CORE)
+#if defined(STEPPER_ON_2ND_CORE) && defined(ARDUINO_ARCH_RP2040)
 /* **********************************************************************************
     This will run the set() function from the custom device on the 2nd core
     Be aware NOT to use the function calls from the Pico SDK!
@@ -199,34 +215,40 @@ namespace Stepper
 ********************************************************************************** */
 void setup1()
 {
-    rp2040.fifo.push(true); // inform core 1 to be ready
+    // send "ready" message to 1st core
+    rp2040.fifo.push(true);
 }
 
 void loop1()
 {
     uint8_t command, stepper;
     int32_t param1, param2;
+    bool    stopUpdating = false;
 
     while (1) {
-        for (uint8_t i = 0; i < Stepper::steppersRegistered; ++i) {
+        for (uint8_t i = 0; i < Stepper::steppersRegistered && !stopUpdating; ++i) {
             Stepper::steppers[i].update();
-            if (rp2040.fifo.available()) {
-                command = (uint8_t)rp2040.fifo.pop();
-                stepper = (uint8_t)rp2040.fifo.pop();
-                param1  = (int32_t)rp2040.fifo.pop();
-                param2  = (int32_t)rp2040.fifo.pop();
-                if (command == Stepper::FUNC_MOVETO) {
-                    Stepper::steppers[stepper].moveTo(param1);
-                } else if (command == Stepper::FUNC_ZETZERO) {
-                    Stepper::steppers[stepper].setZero();
-                } else if (command == Stepper::FUNC_SPEEDACCEL) {
-                    Stepper::steppers[stepper].setMaxSpeed(param1);
-                    Stepper::steppers[stepper].setAcceleration(param2);
-                } else if (command == Stepper::FUNC_RESET) {
-                    Stepper::steppers[stepper].reset();
-                }
-                rp2040.fifo.push(true); // inform core 1 to be ready for next command
+        }
+        if (rp2040.fifo.available()) {
+            command = (uint8_t)rp2040.fifo.pop();
+            stepper = (uint8_t)rp2040.fifo.pop();
+            param1  = (int32_t)rp2040.fifo.pop();
+            param2  = (int32_t)rp2040.fifo.pop();
+            if (command == Stepper::FUNC_MOVETO) {
+                Stepper::steppers[stepper].moveTo(param1);
+            } else if (command == Stepper::FUNC_ZETZERO) {
+                Stepper::steppers[stepper].setZero();
+            } else if (command == Stepper::FUNC_SPEEDACCEL) {
+                Stepper::steppers[stepper].setMaxSpeed(param1);
+                Stepper::steppers[stepper].setAcceleration(param2);
+            } else if (command == Stepper::START_STOP_2ND_CORE) {
+                stopUpdating = (bool)param1;
+                // inform core 0 that command has been executed
+                // it's additional needed in this case
+                rp2040.fifo.push(true);
             }
+            // send ready for next message to 1st core
+            rp2040.fifo.push(true);
         }
     }
 }
