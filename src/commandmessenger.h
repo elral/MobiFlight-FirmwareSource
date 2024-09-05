@@ -45,7 +45,7 @@ enum {
     kDigInMuxChangeDeprecated,     // 30
     kSetStepperSpeedAccel,         // 31
     kSetCustomDevice,              // 32
-
+    kSetModuleSingleSegment,       // 33
     // functions which get be called from the UI via the command messenger
     // must be added before. The command messenger has a fix buffer size
     // for the functions which defined by MAXCALLBACKS=30.
