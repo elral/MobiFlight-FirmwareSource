@@ -5,7 +5,6 @@
 //
 
 #include "MFEEPROM.h"
-#include "Stepper.h"
 
 MFEEPROM::MFEEPROM() {}
 

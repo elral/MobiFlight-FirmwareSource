@@ -6,13 +6,6 @@
 
 #pragma once
 
-#include "mobiflight.h"
-#if defined(ARDUINO_ARCH_ESP32) && defined(STEPPER_ON_2ND_CORE)
-#include "Stepper.h"
-#endif
-#if defined(ARDUINO_ARCH_ESP32) && defined(USE_2ND_CORE)
-#include "CustomDevice.h"
-#endif
 #include <EEPROM.h>
 
 class MFEEPROM

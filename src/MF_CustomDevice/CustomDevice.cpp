@@ -168,7 +168,11 @@ namespace CustomDevice
 void setup1()
 {
     // send "ready" message to 1st core
+    rp2040.fifo.push(true);
+}
+
 void loop1()
+{
     int16_t device;
     int16_t messageID;
     char   *payload;

@@ -3,7 +3,6 @@
 //
 // (C) MobiFlight Project 2022
 //
-#include "Arduino.h"
 #include "mobiflight.h"
 
 #include "Button.h"
