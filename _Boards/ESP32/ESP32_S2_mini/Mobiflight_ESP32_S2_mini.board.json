@@ -19,12 +19,12 @@
     "Info": {
       "CanInstallFirmware": false,
       "CanResetBoard": false,
-      "FirmwareBaseName": "mobiflight_esp32_s2_mini",
+      "FirmwareBaseName": "mobiflight_esp32_s2_mini_merged",
       "FirmwareExtension": "bin",
       "FriendlyName": "MobiFlight ESP32 Mini",
-      "LatestFirmwareVersion": "2.4.4",
+      "LatestFirmwareVersion": "2.5.1",
       "MobiFlightType": "MobiFlight ESP32S2mini",
-      "ResetFirmwareFile": "reset.esp32_s2_mini.bin"
+      "ResetFirmwareFile": "reset.esp32_s2_mini_merged.bin"
     },
     "ModuleLimits": {
       "MaxAnalogInputs": 18,

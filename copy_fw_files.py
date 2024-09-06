@@ -30,11 +30,12 @@ def copy_fw_files (source, target, env):
 
     if platform == "espressif32":
         merge_bin(source, target, env)
-        fw_file_name=fw_file_name[0:-4] + "_merged.bin"
+        old_name = fw_file_name[0:-4] + "_merged.bin"
+        fw_file_name = fw_file_name[0:-9]  + "merged_" + firmware_version.replace(".", "_") + ".bin"
+        os.replace(old_name, fw_file_name)
 
     # Copy build FW file
     shutil.copy(fw_file_name, build_path_fw)
-    # merged bin file from ESP32 is missing!!
 
     # Copy reset/uf2/json files
     file_extension = '.hex'
