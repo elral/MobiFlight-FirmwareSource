@@ -10,10 +10,10 @@ namespace CustomDevice
     void update();
     void OnSet();
     void PowerSave(bool state);
-#if defined(STEPPER_ON_2ND_CORE) && defined(ARDUINO_ARCH_RP2040)
+#if defined(USE_2ND_CORE) && defined(ARDUINO_ARCH_RP2040)
     void stopUpdate2ndCore(bool stop);
 #endif
 }
-#if defined(ARDUINO_ARCH_ESP32) && defined(USE_2ND_CORE)
+#if defined(USE_2ND_CORE) && defined(ARDUINO_ARCH_ESP32)
     void setup1();
 #endif
