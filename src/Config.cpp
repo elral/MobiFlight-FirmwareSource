@@ -695,7 +695,7 @@ void generateSerial(bool force)
         MFeeprom.read_block(MEM_OFFSET_SERIAL, serial, MEM_LEN_SERIAL);
         return;
     }
-    
+
 #if defined(ARDUINO_ARCH_AVR)
     // Coming here no serial number is available (so it's the first start up of an AVR board)
     // or a uniqueID is already generated and saved to the eeprom

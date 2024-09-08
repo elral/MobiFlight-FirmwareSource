@@ -4,7 +4,9 @@
 // (C) MobiFlight Project 2022
 //
 
+#include <Arduino.h>
 #include "MFEEPROM.h"
+#include "MFBoards.h"
 
 MFEEPROM::MFEEPROM() {}
 
