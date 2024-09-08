@@ -188,23 +188,30 @@ void loop1()
 #if defined(MF_CUSTOMDEVICE_HAS_UPDATE)
             for (int i = 0; i < CustomDevice::customDeviceRegistered && !stopUpdating; i++) {
                 CustomDevice::customDevice[i].update();
-#endif
-                if (rp2040.fifo.available() == 3) {
-                    // Hmhm, how to get the function pointer to a function from class??
-                    // int32_t (*func)(int16_t, char*) = (int32_t(*)(int16_t, char*)) rp2040.fifo.pop();
-                    device    = (uint8_t)rp2040.fifo.pop();
-                    messageID = (int16_t)rp2040.fifo.pop();
-                    payload   = (char *)rp2040.fifo.pop();
-                    // (*func)(messageID, payload);
-                    CustomDevice::customDevice[device].set(messageID, payload);
-                    // send ready for next message to 1st core
-                    rp2040.fifo.push(true);
-                }
             }
+#endif
 #ifdef MF_CUSTOMDEVICE_POLL_MS
             lastMillis = millis();
         }
 #endif
+        if (rp2040.fifo.available() == 3) {
+            // Hmhm, how to get the function pointer to a function from class??
+            // int32_t (*func)(int16_t, char*) = (int32_t(*)(int16_t, char*)) rp2040.fifo.pop();
+            device    = (int16_t)rp2040.fifo.pop();
+            messageID = (int16_t)rp2040.fifo.pop();
+            payload   = (char *)rp2040.fifo.pop();
+            if (device == -1) {
+                stopUpdating = (bool)messageID;
+                // inform core 0 that command has been executed
+                // it's additional needed in this case
+                rp2040.fifo.push(true);
+            } else {
+                // (*func)(messageID, payload);
+                CustomDevice::customDevice[device].set(messageID, payload);
+            }
+            // send ready for next message to 1st core
+            rp2040.fifo.push(true);
+        }
     }
 }
 #endif
