@@ -1,7 +1,7 @@
 {
   "$schema": "./mfboard.schema.json",
   "UsbDriveSettings": {
-    "VolumeLabel": "RPI-RP2",
+    "VolumeLabel": "RP2350",
     "VerificationFileName": "INFO_UF2.TXT"
   },
   "Connection": {
@@ -13,7 +13,7 @@
     "ForceResetOnFirmwareUpdate": true,
     "MessageSize": 96
   },
-  "HardwareIds": ["^VID_2E8A&PID_000A","^VID_2E8A&PID_F00A","^VID_2E8A&PID_F00F"],
+  "HardwareIds": ["^VID_2E8A&PID_F00A","^VID_2E8A&PID_F00F"],
   "Info": {
     "CanInstallFirmware": true,
     "CanResetBoard": true,
