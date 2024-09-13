@@ -13,13 +13,13 @@
     "ForceResetOnFirmwareUpdate": true,
     "MessageSize": 96
   },
-  "HardwareIds": ["^VID_2E8A&PID_F00A","^VID_2E8A&PID_F00F"],
+  "HardwareIds": ["^VID_2E8A&PID_000A","^VID_2E8A&PID_F00A","^VID_2E8A&PID_F00F"],
   "Info": {
     "CanInstallFirmware": true,
     "CanResetBoard": true,
-    "FirmwareBaseName": "mobiflight_raspberrypico2_generic",
+    "FirmwareBaseName": "mobiflight_raspberrypico2B_generic",
     "FirmwareExtension": "uf2",
-    "FriendlyName": "Raspberry Pico2 generic",
+    "FriendlyName": "Raspberry Pico2B generic",
     "LatestFirmwareVersion": "2.5.1",
     "MobiFlightType": "MobiFlight RaspiPico2 generic",
     "ResetFirmwareFile": "reset.raspberry_pico2_flash_nuke.uf2"
