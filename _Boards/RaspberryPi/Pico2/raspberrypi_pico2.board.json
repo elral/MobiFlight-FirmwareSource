@@ -1,7 +1,7 @@
 {
   "$schema": "./mfboard.schema.json",
   "UsbDriveSettings": {
-    "VolumeLabel": "RP2350",
+    "VolumeLabel": "RPI-RP2",
     "VerificationFileName": "INFO_UF2.TXT"
   },
   "Connection": {
