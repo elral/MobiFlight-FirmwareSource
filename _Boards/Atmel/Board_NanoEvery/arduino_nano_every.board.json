@@ -1,10 +1,10 @@
 {
     "$schema": "./mfboard.schema.json",
     "AvrDudeSettings": {
+      "Attempts": 1,
       "Device": "atmega4809",
-      "BaudRate": "115200",
+      "BaudRates": ["115200"],
       "Programmer": "jtag2updi",
-      "FirmwareBaseName": "mobiflight_nano_every",
       "Timeout": 15000
     },
     "Connection": {
@@ -14,7 +14,8 @@
       "EEPROMSize": 256,
       "ExtraConnectionRetry": true,
       "ForceResetOnFirmwareUpdate": false,
-      "MessageSize": 64
+      "MessageSize": 96,
+      "TimeoutForFirmwareUpdate": 60000
     },
     "HardwareIds": [
       "^VID_2341&PID_0043",
@@ -28,9 +29,13 @@
     ],
     "Info": {
       "CanInstallFirmware": true,
+      "CanResetBoard": true,
+      "FirmwareBaseName": "mobiflight_nano_every",
+      "FirmwareExtension": "hex",
       "FriendlyName": "Arduino NanoEvery",
-      "LatestFirmwareVersion": "2.4.1",
-      "MobiFlightType": "Mobiflight NanoEvery"
+      "LatestFirmwareVersion": "2.5.1",
+      "MobiFlightType": "Mobiflight NanoEvery",
+      "ResetFirmwareFile": "reset.arduino_nano_every_1_0_2.hex"
     },
     "ModuleLimits": {
       "MaxAnalogInputs": 6,
@@ -43,7 +48,8 @@
       "MaxServos": 2,
       "MaxShifters": 2,
       "MaxSteppers": 2,
-      "MaxDigInputMuxes": 3
+      "MaxDigInputMuxes": 3,
+      "MaxCustomDevices": 0
     },
     "Pins": [
       {
