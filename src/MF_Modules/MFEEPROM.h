@@ -20,7 +20,7 @@ public:
     uint8_t read_byte(uint16_t adr);
     bool write_byte(uint16_t adr, const uint8_t data);
     void commit() {
-#if !defined(ARDUINO_ARCH_AVR)
+#if !defined(ARDUINO_ARCH_AVR) && !defined(ARDUINO_ARCH_MEGAAVR)
         EEPROM.commit();
 #endif
     }

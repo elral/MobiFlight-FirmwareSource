@@ -12,7 +12,7 @@ MFEEPROM::MFEEPROM() {}
 
 void MFEEPROM::init(void)
 {
-#if !defined(ARDUINO_ARCH_AVR)
+#if !defined(ARDUINO_ARCH_AVR) && !defined(ARDUINO_ARCH_MEGAAVR)
     EEPROM.begin(4096);
 #endif
     _eepromLength = EEPROM.length();
