@@ -9,7 +9,7 @@
 #include "Button.h"
 #include "Encoder.h"
 #include "Output.h"
-#if !defined(ARDUINO_ARCH_AVR)
+#if !defined(ARDUINO_ARCH_AVR) && !defined(ARDUINO_ARCH_RP2040)
 #include "ArduinoUniqueID.h"
 #endif
 
@@ -67,8 +67,11 @@ const uint8_t MEM_OFFSET_SERIAL = MEM_OFFSET_NAME + MEM_LEN_NAME;
 const uint8_t MEM_LEN_SERIAL    = 11;
 const uint8_t MEM_OFFSET_CONFIG = MEM_OFFSET_NAME + MEM_LEN_NAME + MEM_LEN_SERIAL;
 
-#if defined(ARDUINO_ARCH_AVR) || defined(PICO_RP2350)
+#if defined(ARDUINO_ARCH_AVR)
 char serial[11]; // 3 characters for "SN-",7 characters for "xyz-zyx" plus terminating NULL
+#elif defined(ARDUINO_ARCH_RP2040)
+#define UniqueIDsize 8
+char serial[3 + UniqueIDsize * 2 + 1]; // 3 characters for "SN-", UniqueID as HEX String, terminating NULL
 #else
 char serial[3 + UniqueIDsize * 2 + 1]; // 3 characters for "SN-", UniqueID as HEX String, terminating NULL
 #endif
@@ -633,7 +636,7 @@ bool getStatusConfig()
 // ************************************************************
 
 // Generate a serial number only for AVR's
-#if defined(ARDUINO_ARCH_AVR) || defined(PICO_RP2350)
+#if defined(ARDUINO_ARCH_AVR)
 void generateRandomSerial()
 {
     // To have not always the same starting point for the random generator, millis() are
@@ -665,9 +668,18 @@ void generateRandomSerial()
 }
 #endif
 
-#if !defined(ARDUINO_ARCH_AVR) && !defined(PICO_RP2350)
+#if !defined(ARDUINO_ARCH_AVR)
 void readUniqueSerial()
 {
+#if defined(ARDUINO_ARCH_RP2040)
+    uint8_t UniqueID[UniqueIDsize];
+    pico_unique_board_id_t sn;
+    pico_get_unique_board_id(&sn);
+    for (size_t i = 0; i < UniqueIDsize; i++)
+    {
+        UniqueID[i] = sn.id[i];
+    }
+#endif
     serial[0] = 'S';
     serial[1] = 'N';
     serial[2] = '-';
@@ -685,7 +697,7 @@ void generateSerial(bool force)
     if (force) {
         // A serial number is forced to generate
         // generate a serial number acc. the old style only for AVR's
-#if defined(ARDUINO_ARCH_AVR) || defined(PICO_RP2350)
+#if defined(ARDUINO_ARCH_AVR)
         generateRandomSerial();
 #else
         // For other boards always the UniqueID is used.
@@ -706,7 +718,7 @@ void generateSerial(bool force)
         return;
     }
 
-#if defined(ARDUINO_ARCH_AVR) || defined(PICO_RP2350)
+#if defined(ARDUINO_ARCH_AVR)
     // Coming here no serial number is available (so it's the first start up of an AVR board)
     // or a uniqueID is already generated and saved to the eeprom
     // AVR's are forced to roll back to "old style" serial number
