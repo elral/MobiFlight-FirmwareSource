@@ -9,7 +9,7 @@
 #include "Button.h"
 #include "Encoder.h"
 #include "Output.h"
-#if !defined(ARDUINO_ARCH_AVR) && !defined(ARDUINO_ARCH_RP2040)
+#if !defined(ARDUINO_ARCH_AVR) && !defined(RP2350_PSRAM_CS)
 #include "ArduinoUniqueID.h"
 #endif
 
@@ -69,7 +69,7 @@ const uint8_t MEM_OFFSET_CONFIG = MEM_OFFSET_NAME + MEM_LEN_NAME + MEM_LEN_SERIA
 
 #if defined(ARDUINO_ARCH_AVR)
 char serial[11]; // 3 characters for "SN-",7 characters for "xyz-zyx" plus terminating NULL
-#elif defined(ARDUINO_ARCH_RP2040)
+#elif defined(RP2350_PSRAM_CS)
 #define UniqueIDsize 8
 char serial[3 + UniqueIDsize * 2 + 1]; // 3 characters for "SN-", UniqueID as HEX String, terminating NULL
 #else
@@ -671,7 +671,7 @@ void generateRandomSerial()
 #if !defined(ARDUINO_ARCH_AVR)
 void readUniqueSerial()
 {
-#if defined(ARDUINO_ARCH_RP2040)
+#if defined(RP2350_PSRAM_CS)
     uint8_t UniqueID[UniqueIDsize];
     pico_unique_board_id_t sn;
     pico_get_unique_board_id(&sn);
