@@ -27,6 +27,7 @@ public:
     void detach();
     void clear();
     void update();
+    void powerSavingMode(bool state);
 
 private:
     FASTIO_s _latchPin;
