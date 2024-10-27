@@ -18,6 +18,15 @@ void MFAnalog::attach(uint8_t pin, const char *name, uint8_t sensitivity)
     _sensitivity = sensitivity;
     _pin         = pin;
     _name        = name;
+#if defined(ARDUINO_AVR_PROMICRO16)
+    // ProMicro has a special pin assignment for analog pins
+    // therefore reading from A6 and A7 does not work
+    // via "digital" pins. See also pins_arduino.h
+    if (_pin == 4)
+        _pin = A6;
+    else if (_pin == 6)
+        _pin = A7;
+#endif
     pinMode(_pin, INPUT_PULLUP); // set pin to input. Could use OUTPUT for analog, but shows the intention :-)
     // Fill averaging buffers with initial reading
     for (uint8_t i = 0; i < ADC_MAX_AVERAGE; i++) {
