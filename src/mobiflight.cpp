@@ -26,6 +26,9 @@
 #if MF_SERVO_SUPPORT == 1
 #include "Servos.h"
 #endif
+#if MF_LCD_SUPPORT == 1
+#include "LCDDisplay.h"
+#endif
 #if MF_OUTPUT_SHIFTER_SUPPORT == 1
 #include "OutputShifter.h"
 #endif
@@ -145,6 +148,9 @@ void SetPowerSavingMode(bool state)
 #endif
 #if MF_OUTPUT_SHIFTER_SUPPORT == 1
     OutputShifter::PowerSave(state);
+#endif
+#if MF_LCD_SUPPORT == 1
+    LCDDisplay::PowerSave(state);
 #endif
 
 #ifdef DEBUG2CMDMESSENGER
