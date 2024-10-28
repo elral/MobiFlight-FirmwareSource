@@ -1,0 +1,21 @@
+Nano_Every
+<lambda>(["upload"], [".pio\build\nano_every\mobiflight_nano_every_0_0_1.hex"])
+AVAILABLE: jtag2updi
+CURRENT: upload_protocol = jtag2updi
+BeforeUpload(["upload"], [".pio\build\nano_every\mobiflight_nano_every_0_0_1.hex"])
+Using manually specified: COM3
+Forcing reset using 1200bps open/close on port COM3
+avrdude -v -p atmega4809 -C C:\Users\ralfk\.platformio\packages\tool-avrdude-megaavr\avrdude.conf
+    -c jtag2updi
+    -b 115200 -D -P "COM3"
+    -U flash:w:.pio\build\nano_every\mobiflight_nano_every_0_0_1.hex:i
+    -Ufuse2:w:0x01:m -Ufuse5:w:0xC9:m -Ulock:w:0xC5:m -V -e
+
+Nano
+CURRENT: upload_protocol = arduino
+BeforeUpload(["upload"], [".pio\build\nano\mobiflight_nano_2_4_1.hex"])
+Auto-detected: COM3
+avrdude -v -p atmega328p -C C:\Users\ralfk\.platformio\packages\tool-avrdude\avrdude.conf
+    -c arduino
+    -b 115200 -D -P COM3
+    -U flash:w:.pio\build\nano\mobiflight_nano_2_4_1.hex:i
