@@ -100,7 +100,7 @@ namespace Stepper
         // wait for 2nd core
         rp2040.fifo.pop();
         rp2040.fifo.push(FUNC_SETRELATIVE);
-        rp2040.fifo.push(stepper);
+        rp2040.fifo.push(_stepper);
         rp2040.fifo.push(_pos);
         rp2040.fifo.push(false);
 #else

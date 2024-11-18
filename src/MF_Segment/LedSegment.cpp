@@ -32,7 +32,7 @@ namespace LedSegment
         if (!ledSegments[ledSegmentsRegistered].attach(type, dataPin, csPin, clkPin, numDevices, brightness))
         {
             cmdMessenger.sendCmd(kStatus, F("Led Segment array does not fit into Memory"));
-            return;
+            return 0xFF;
         }
 
         ledSegmentsRegistered++;
