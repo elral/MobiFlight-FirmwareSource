@@ -17,8 +17,8 @@ namespace Stepper
     void update();
     void OnSetSpeedAccel();
     void PowerSave(bool state);
-#if defined(STEPPER_ON_2ND_CORE) && defined(ARDUINO_ARCH_RP2040)
     void SetRelative(uint8_t _stepper, int16_t _pos);
+#if defined(STEPPER_ON_2ND_CORE) && defined(ARDUINO_ARCH_RP2040)
     void stopUpdate2ndCore(bool stop);
 #endif
 }
