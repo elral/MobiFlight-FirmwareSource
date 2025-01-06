@@ -17,6 +17,8 @@ namespace Analog
 
     void handlerOnAnalogChange(int value, uint8_t deviceID)
     {
+        if (!getBoardReady())
+            return;
         cmdMessenger.sendCmdStart(kAnalogChange);
         cmdMessenger.sendCmdArg(deviceID);
         cmdMessenger.sendCmdArg(value);

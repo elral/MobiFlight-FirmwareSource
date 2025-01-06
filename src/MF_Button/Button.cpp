@@ -16,6 +16,8 @@ namespace Button
 
     void handlerButtonOnChange(uint8_t eventId, uint8_t deviceID)
     {
+        if (!getBoardReady())
+            return;
         cmdMessenger.sendCmdStart(kButtonChange);
         cmdMessenger.sendCmdArg(deviceID);
         cmdMessenger.sendCmdArg(eventId);

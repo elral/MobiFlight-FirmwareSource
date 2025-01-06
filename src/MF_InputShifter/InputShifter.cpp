@@ -16,6 +16,8 @@ namespace InputShifter
 
     void handlerInputShifterOnChange(uint8_t eventId, uint8_t pin, uint8_t deviceID)
     {
+        if (!getBoardReady())
+            return;
         cmdMessenger.sendCmdStart(kInputShifterChange);
         cmdMessenger.sendCmdArg(deviceID);
         cmdMessenger.sendCmdArg(pin);

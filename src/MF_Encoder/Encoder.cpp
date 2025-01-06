@@ -16,6 +16,8 @@ namespace Encoder
 
     void handlerOnEncoder(uint8_t eventId, uint8_t deviceID)
     {
+        if (!getBoardReady())
+            return;
         cmdMessenger.sendCmdStart(kEncoderChange);
         cmdMessenger.sendCmdArg(deviceID);
         cmdMessenger.sendCmdArg(eventId);
