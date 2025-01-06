@@ -41,5 +41,6 @@ void OnGetInfo(void);
 void OnGenNewSerial(void);
 void OnSetName(void);
 void restoreName(void);
+bool getBoardReady();
 
 // config.h
