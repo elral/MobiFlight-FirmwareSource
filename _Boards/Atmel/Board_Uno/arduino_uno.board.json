@@ -32,9 +32,15 @@
     "FriendlyName": "Arduino Uno",
     "FirmwareBaseName": "mobiflight_uno",
     "FirmwareExtension": "hex",
-    "LatestFirmwareVersion": "3.0.0",
+    "LatestFirmwareVersion": "0.0.1",
     "MobiFlightType": "MobiFlight Uno",
-    "ResetFirmwareFile": "reset.arduino_uno_1_0_2.hex"
+    "ResetFirmwareFile": "reset.arduino_uno_1_0_2.hex",
+    "Community": {
+      "Project": "MobiFlight Uno",
+      "Website": "https://mobiflight.com/links/connector/info/website/uno.html",
+      "Docs": "https://mobiflight.com/links/connector/info/docs/uno.html",
+      "Support": "https://mobiflight.com/discord"
+    }
   },
   "ModuleLimits": {
     "MaxAnalogInputs": 6,
