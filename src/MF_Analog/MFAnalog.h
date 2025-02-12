@@ -26,7 +26,7 @@ class MFAnalog
 public:
     MFAnalog();
     static void attachHandler(analogEvent handler);
-    void        attach(uint8_t pin, const char *name, uint8_t sensitivity);
+    void        attach(uint8_t pin, const char *name, uint8_t sensitivity, bool deprecated);
     void        update();
     int16_t     getActualValue();
     void        retrigger();

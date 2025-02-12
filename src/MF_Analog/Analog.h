@@ -10,7 +10,7 @@
 namespace Analog
 {
     bool    setupArray(uint16_t count);
-    uint8_t Add(uint8_t pin, char const *name = "AnalogInput", uint8_t sensitivity = 3);
+    uint8_t Add(uint8_t pin, char const *name = "AnalogInput", uint8_t sensitivity = 3, bool deprecated = true);
     void    Clear();
     void    read();
     void    readAverage();

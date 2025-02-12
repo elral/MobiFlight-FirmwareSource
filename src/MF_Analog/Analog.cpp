@@ -34,13 +34,13 @@ namespace Analog
         return true;
     }
 
-    uint8_t Add(uint8_t pin, char const *name, uint8_t sensitivity)
+    uint8_t Add(uint8_t pin, char const *name, uint8_t sensitivity, bool deprecated)
     {
         if (analogRegistered == maxAnalogIn)
             return 0xFF;
 
         analog[analogRegistered] = MFAnalog();
-        analog[analogRegistered].attach(pin, name, sensitivity);
+        analog[analogRegistered].attach(pin, name, sensitivity, deprecated);
         MFAnalog::attachHandler(handlerOnAnalogChange);
         analogRegistered++;
 #ifdef DEBUG2CMDMESSENGER
