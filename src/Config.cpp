@@ -514,10 +514,14 @@ void readConfigFromMemory(bool configFromFlash)
 #endif
 
 #if MF_ANALOG_SUPPORT == 1
+        case kTypeAnalogInputDeprecated:
         case kTypeAnalogInput:
             params[0] = readUint(&addrMem, configFromFlash); // pin number
             params[1] = readUint(&addrMem, configFromFlash); // sensitivity
-            Analog::Add(params[0], params[1]);
+            if (command == kTypeAnalogInputDeprecated)
+                Analog::Add(params[0], params[1], true);
+            else
+                Analog::Add(params[0], params[1], false);
             copy_success = readEndCommand(&addrMem, ':', configFromFlash);
             break;
 #endif
