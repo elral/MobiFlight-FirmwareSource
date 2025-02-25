@@ -365,7 +365,7 @@ void InitArrays(uint8_t *numberDevices)
         sendFailureMessage("LCD");
 #endif
 #ifdef MF_ANALOG_SUPPORT
-    if (!Analog::setupArray(numberDevices[kTypeAnalogInput]))
+    if (!Analog::setupArray(numberDevices[kTypeAnalogInput] + numberDevices[kTypeAnalogInputDeprecated]))
         sendFailureMessage("AnalogIn");
 #endif
 #ifdef MF_OUTPUT_SHIFTER_SUPPORT
