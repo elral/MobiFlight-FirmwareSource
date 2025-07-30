@@ -12,7 +12,7 @@ void MFServo::moveTo(int absolute)
     if (_targetPos != newValue) {
         _targetPos = newValue;
         if (!_initialized) {
-#if defined(ARDUINO_ARCH_RP2040)
+#ifdef ARDUINO_ARCH_RP2040
             _servo.attach(_pin, 544, 2400);
 #elif defined(ARDUINO_ARCH_ESP32)
             _servo.attach(_pin, 500, 2500);
