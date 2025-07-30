@@ -10,6 +10,9 @@ if firmware_version == "":
 firmware_version = firmware_version.lstrip("v")
 firmware_version = firmware_version.strip(".")
 
+platform = env.BoardConfig().get("platform", {})
+#   atmelavr/raspberrypi/ststm32
+
 zip_file_name = 'Mobiflight-Connector'
 build_path = Path('./_build')
 build_path_fw = build_path / 'firmware'
@@ -25,7 +28,7 @@ def copy_fw_files (source, target, env):
     if os.path.exists(build_path_json) == False:
         os.makedirs(build_path_json)
 
-    if fw_file_name[-3:] == "bin":
+    if fw_file_name[-3:] == "bin" and platform == "raspberrypi":
         fw_file_name=fw_file_name[0:-3] + "uf2"
 
     # Copy build FW file
