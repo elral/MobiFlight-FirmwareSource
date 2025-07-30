@@ -4,15 +4,13 @@
 // (C) MobiFlight Project 2022
 //
 
-#include <Arduino.h>
 #include "MFEEPROM.h"
-#include "MFBoards.h"
 
 MFEEPROM::MFEEPROM() {}
 
 void MFEEPROM::init(void)
 {
-#if !defined(ARDUINO_ARCH_AVR)
+#if !defined(ARDUINO_ARCH_AVR) && !defined(ARDUINO_ARCH_RENESAS)
     EEPROM.begin(4096);
 #endif
     _eepromLength = EEPROM.length();
