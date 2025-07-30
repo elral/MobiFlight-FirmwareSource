@@ -4,9 +4,7 @@
 // (C) MobiFlight Project 2022
 //
 
-#include <Arduino.h>
 #include "MFEEPROM.h"
-#include "MFBoards.h"
 
 #if defined(DATA_EEPROM_BASE)
 #error "STM32 devices have an integrated EEPROM. No buffered API available."

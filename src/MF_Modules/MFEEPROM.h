@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <Arduino.h>
 #include <EEPROM.h>
 
 class MFEEPROM
@@ -17,10 +18,11 @@ public:
     MFEEPROM();
     void     init(void);
     uint16_t get_length(void);
-    uint8_t read_byte(uint16_t adr);
-    bool write_byte(uint16_t adr, const uint8_t data);
-    void commit() {
-#if (!defined(ARDUINO_ARCH_AVR) && !defined(ARDUINO_ARCH_STM32))
+    uint8_t  read_byte(uint16_t adr);
+    bool     write_byte(uint16_t adr, const uint8_t data);
+    void     commit()
+    {
+#if !defined(ARDUINO_ARCH_AVR) && !defined(ARDUINO_ARCH_STM32)
         EEPROM.commit();
 #endif
 #if defined(ARDUINO_ARCH_STM32)
@@ -47,7 +49,7 @@ public:
     bool read_block(uint16_t adr, T &t, uint16_t len)
     {
         if (adr + len > _eepromLength) return false;
-        uint8_t *ptr = (uint8_t*) &t;
+        uint8_t *ptr = (uint8_t *)&t;
         for (uint16_t i = 0; i < len; i++) {
 #if defined(ARDUINO_ARCH_STM32)
             *ptr++ = eeprom_buffered_read_byte(adr + i);
