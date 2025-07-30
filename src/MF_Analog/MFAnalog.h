@@ -7,7 +7,6 @@
 #pragma once
 
 #include <Arduino.h>
-#include "MFBoards.h"
 
 // Following value defines the buffer size for samples; the larger the buffer,
 // the smoother the response (and the larger the delay).
