@@ -25,7 +25,7 @@
     "ResetFirmwareFile": "reset.raspberry_pico1-2_flash_nuke.uf2"
   },
   "ModuleLimits": {
-    "MaxAnalogInputs": 3,
+    "MaxAnalogInputs": 8,
     "MaxInputShifters": 6,
     "MaxButtons": 48,
     "MaxEncoders": 13,
