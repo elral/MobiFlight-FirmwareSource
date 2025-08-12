@@ -64,7 +64,7 @@ void PowerSavingWrapper_LedSegmentModule_OnSet()
 void PowerSavingWrapper_LedSegmentSingleSegment_OnSet()
 {
     trackCommand();
-    LedSegment::OnSetModule();
+    LedSegment::OnSetModuleSingleSegment();
 }
 #endif
 
