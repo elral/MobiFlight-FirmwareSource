@@ -92,6 +92,14 @@ void PowerSavingWrapper_OutputShifter_OnSet()
 }
 #endif
 
+#ifdef MF_SERVO_SUPPORT
+void PowerSavingWrapper_Servo_OnSet()
+{
+    trackCommand();
+    Servos::OnSet();
+}
+#endif
+
 #ifdef MF_CUSTOMDEVICE_SUPPORT
 void PowerSavingWrapper_CustomDevice_OnSet()
 {
@@ -124,7 +132,7 @@ void attachCommandCallbacks()
 #endif
 
 #ifdef MF_SERVO_SUPPORT
-    cmdMessenger.attach(kSetServo, Servos::OnSet);
+    cmdMessenger.attach(kSetServo, PowerSavingWrapper_Servo_OnSet);
 #endif
 
     cmdMessenger.attach(kGetInfo, OnGetInfo);
