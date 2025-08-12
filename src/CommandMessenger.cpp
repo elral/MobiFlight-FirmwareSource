@@ -44,6 +44,63 @@ void OnSetPowerSavingMode();
 void OnTrigger();
 void OnUnknownCommand();
 
+void trackCommand()
+{
+    lastCommand = millis();
+}
+
+void PowerSavingWrapper_Output_OnSet()
+{
+    trackCommand();
+    Output::OnSet();
+}
+
+#ifdef MF_SEGMENT_SUPPORT
+void PowerSavingWrapper_LedSegmentModule_OnSet()
+{
+    trackCommand();
+    LedSegment::OnSetModule();
+}
+void PowerSavingWrapper_LedSegmentSingleSegment_OnSet()
+{
+    trackCommand();
+    LedSegment::OnSetModule();
+}
+#endif
+
+#ifdef MF_STEPPER_SUPPORT
+void PowerSavingWrapper_Stepper_OnSet()
+{
+    trackCommand();
+    Stepper::OnSet();
+}
+#endif
+
+#ifdef MF_LCD_SUPPORT
+void PowerSavingWrapper_LCD_OnSet()
+{
+    trackCommand();
+    LCDDisplay::OnSet();
+}
+#endif
+
+#ifdef MF_OUTPUT_SHIFTER_SUPPORT
+void PowerSavingWrapper_OutputShifter_OnSet()
+{
+    trackCommand();
+    OutputShifter::OnSet();
+}
+#endif
+
+#ifdef MF_CUSTOMDEVICE_SUPPORT
+void PowerSavingWrapper_CustomDevice_OnSet()
+{
+    trackCommand();
+    CustomDevice::OnSet();
+}
+#endif
+
+
 // Callbacks define on which received commands we take action
 void attachCommandCallbacks()
 {
@@ -52,15 +109,15 @@ void attachCommandCallbacks()
 
 #ifdef MF_SEGMENT_SUPPORT
     cmdMessenger.attach(kInitModule, LedSegment::OnInitModule);
-    cmdMessenger.attach(kSetModule, LedSegment::OnSetModule);
+    cmdMessenger.attach(kSetModule, PowerSavingWrapper_LedSegmentModule_OnSet);
     cmdMessenger.attach(kSetModuleBrightness, LedSegment::OnSetModuleBrightness);
-    cmdMessenger.attach(kSetModuleSingleSegment, LedSegment::OnSetModuleSingleSegment);
+    cmdMessenger.attach(kSetModuleSingleSegment, PowerSavingWrapper_LedSegmentSingleSegment_OnSet);
 #endif
 
     cmdMessenger.attach(kSetPin, Output::OnSet);
 
 #ifdef MF_STEPPER_SUPPORT
-    cmdMessenger.attach(kSetStepper, Stepper::OnSet);
+    cmdMessenger.attach(kSetStepper, PowerSavingWrapper_Stepper_OnSet);
     cmdMessenger.attach(kResetStepper, Stepper::OnReset);
     cmdMessenger.attach(kSetZeroStepper, Stepper::OnSetZero);
     cmdMessenger.attach(kSetStepperSpeedAccel, Stepper::OnSetSpeedAccel);
@@ -82,11 +139,11 @@ void attachCommandCallbacks()
     cmdMessenger.attach(kSetPowerSavingMode, OnSetPowerSavingMode);
 
 #ifdef MF_LCD_SUPPORT
-    cmdMessenger.attach(kSetLcdDisplayI2C, LCDDisplay::OnSet);
+    cmdMessenger.attach(kSetLcdDisplayI2C, PowerSavingWrapper_LCD_OnSet);
 #endif
 
 #ifdef MF_OUTPUT_SHIFTER_SUPPORT
-    cmdMessenger.attach(kSetShiftRegisterPins, OutputShifter::OnSet);
+    cmdMessenger.attach(kSetShiftRegisterPins, PowerSavingWrapper_OutputShifter_OnSet);
 #endif
 
 #ifdef MF_CUSTOMDEVICE_SUPPORT
