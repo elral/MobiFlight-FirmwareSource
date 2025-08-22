@@ -17,11 +17,11 @@
   "Info": {
     "CanInstallFirmware": true,
     "CanResetBoard": true,
-    "FirmwareBaseName": "mobiflight_raspberrypico2B",
+    "FirmwareBaseName": "mobiflight_picomega",
     "FirmwareExtension": "uf2",
-    "FriendlyName": "Raspberry Pico2B",
+    "FriendlyName": "Mobiflight PicoMega",
     "LatestFirmwareVersion": "0.0.1",
-    "MobiFlightType": "MobiFlight RaspiPico2B",
+    "MobiFlightType": "MobiFlight PicoMega",
     "ResetFirmwareFile": "reset.raspberry_pico1-2_flash_nuke.uf2"
   },
   "ModuleLimits": {
