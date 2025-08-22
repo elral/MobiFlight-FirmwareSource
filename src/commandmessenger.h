@@ -47,7 +47,8 @@ enum {
     kSetStepperSpeedAccel,   // 31
     kSetCustomDevice,        // 32
     kSetModuleSingleSegment, // 33
-    kJumpToBootloader,       // 34, only for STM32 to jump to Bootloader
+    kRetriggerDone,          // 34
+    kJumpToBootloader,       // 35, only for STM32 to jump to Bootloader
     kDebug = 0xFF            // 255
 };
 
