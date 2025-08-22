@@ -47,8 +47,9 @@ enum {
     kSetStepperSpeedAccel,   // 31
     kSetCustomDevice,        // 32
     kSetModuleSingleSegment, // 33
-    kSetAnalogCalibration,   // 34
-    kReadAnalogCalibration,  // 35
+    kRetriggerDone,          // 34
+    kSetAnalogCalibration,   // 35
+    kReadAnalogCalibration,  // 36
     kDebug = 0xFF            // 255
 };
 

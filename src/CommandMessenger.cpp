@@ -152,6 +152,7 @@ void OnTrigger()
 #ifdef MF_ANALOG_SUPPORT
     Analog::OnTrigger();
 #endif
+    cmdMessenger.sendCmd(kRetriggerDone);
 }
 
 // commandmessenger.cpp
