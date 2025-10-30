@@ -20,7 +20,7 @@
     "FirmwareBaseName": "mobiflight_raspberrypico2",
     "FirmwareExtension": "uf2",
     "FriendlyName": "Raspberry Pico2",
-    "LatestFirmwareVersion": "2.5.1",
+    "LatestFirmwareVersion": "0.0.1",
     "MobiFlightType": "MobiFlight RaspiPico2",
     "ResetFirmwareFile": "reset.arduino_raspberrypico2_1_0_2.uf2"
   },
