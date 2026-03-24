@@ -31,7 +31,7 @@ namespace Analog
     {
         if (!FitInMemory(sizeof(MFAnalog) * count))
             return false;
-        analog      = new (allocateMemory(sizeof(MFAnalog) * count)) MFAnalog;
+        analog = allocateArray<MFAnalog>(count);
         maxAnalogIn = count;
         return true;
     }

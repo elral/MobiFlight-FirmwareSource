@@ -19,7 +19,7 @@ namespace Output
     {
         if (!FitInMemory(sizeof(MFOutput) * count))
             return false;
-        outputs    = new (allocateMemory(sizeof(MFOutput) * count)) MFOutput;
+        outputs = allocateArray<MFOutput>(count);
         maxOutputs = count;
         return true;
     }

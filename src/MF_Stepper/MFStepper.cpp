@@ -39,17 +39,17 @@ void MFStepper::attach(uint8_t pin1, uint8_t pin2, uint8_t pin3, uint8_t pin4, u
         maxSpeed = STEPPER_SPEED;
         Accel    = STEPPER_ACCEL;
         if (pin1 == pin3 && pin2 == pin4) // for backwards compatibility
-            _stepper = new (allocateMemory(sizeof(AccelStepper))) AccelStepper(AccelStepper::DRIVER, pin1, pin2);
+            _stepper = allocateObject<AccelStepper>(AccelStepper::DRIVER, pin1, pin2);
         else
-            _stepper = new (allocateMemory(sizeof(AccelStepper))) AccelStepper(AccelStepper::FULL4WIRE, pin4, pin2, pin1, pin3);
+            _stepper = allocateObject<AccelStepper>(AccelStepper::FULL4WIRE, pin1, pin2);
         break;
     case HALF4WIRE:
-        _stepper = new (allocateMemory(sizeof(AccelStepper))) AccelStepper(AccelStepper::HALF4WIRE, pin4, pin2, pin1, pin3);
+        _stepper = allocateObject<AccelStepper>(AccelStepper::HALF4WIRE, pin4, pin2, pin1, pin3);
         maxSpeed = STEPPER_SPEED;
         Accel    = STEPPER_ACCEL;
         break;
     case DRIVER:
-        _stepper = new (allocateMemory(sizeof(AccelStepper))) AccelStepper(AccelStepper::DRIVER, pin1, pin2);
+        _stepper = allocateObject<AccelStepper>(AccelStepper::DRIVER, pin1, pin2);
         maxSpeed = STEPPER_SPEED;
         Accel    = STEPPER_ACCEL;
         break;

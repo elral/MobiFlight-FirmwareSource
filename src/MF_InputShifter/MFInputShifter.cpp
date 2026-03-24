@@ -31,7 +31,7 @@ bool MFInputShifter::attach(uint8_t latchPin, uint8_t clockPin, uint8_t dataPin,
     if (!FitInMemory(sizeof(uint8_t) * _moduleCount))
         return false;
 
-    _lastState = new (allocateMemory(sizeof(uint8_t) * _moduleCount)) uint8_t;
+    _lastState = static_cast<uint8_t*>(allocateMemory(sizeof(uint8_t) * _moduleCount, alignof(uint8_t)));
     for (uint8_t i = 0; i < _moduleCount; i++) {
         _lastState[i] = 0;
     }

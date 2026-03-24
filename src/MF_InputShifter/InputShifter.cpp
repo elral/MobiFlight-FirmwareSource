@@ -31,7 +31,7 @@ namespace InputShifter
     {
         if (!FitInMemory(sizeof(MFInputShifter) * count))
             return false;
-        inputShifter    = new (allocateMemory(sizeof(MFInputShifter) * count)) MFInputShifter;
+        inputShifter = allocateArray<MFInputShifter>(count);
         maxInputShifter = count;
         return true;
     }

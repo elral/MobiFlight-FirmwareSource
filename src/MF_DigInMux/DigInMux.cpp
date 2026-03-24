@@ -33,7 +33,7 @@ namespace DigInMux
     {
         if (!FitInMemory(sizeof(MFDigInMux) * count))
             return false;
-        digInMux    = new (allocateMemory(sizeof(MFDigInMux) * count)) MFDigInMux;
+        digInMux = allocateArray<MFDigInMux>(count);
         maxDigInMux = count;
         return true;
     }

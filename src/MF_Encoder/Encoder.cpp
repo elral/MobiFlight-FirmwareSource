@@ -30,7 +30,7 @@ namespace Encoder
     {
         if (!FitInMemory(sizeof(MFEncoder) * count))
             return false;
-        encoders    = new (allocateMemory(sizeof(MFEncoder) * count)) MFEncoder;
+        encoders = allocateArray<MFEncoder>(count);
         maxEncoders = count;
         return true;
     }

@@ -19,7 +19,7 @@ namespace LedSegment
     {
         if (!FitInMemory(sizeof(MFSegments) * count))
             return false;
-        ledSegments            = new (allocateMemory(sizeof(MFSegments) * count)) MFSegments;
+        ledSegments = allocateArray<MFSegments>(count);
         ledSegmentsRegistereds = count;
         return true;
     }

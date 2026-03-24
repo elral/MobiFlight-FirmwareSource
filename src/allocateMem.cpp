@@ -7,26 +7,32 @@
 #include "allocateMem.h"
 #include "commandmessenger.h"
 
-#ifdef ARDUINO_ARCH_AVR
-uint8_t deviceBuffer[MF_MAX_DEVICEMEM] = {0};
-#else
-std::size_t deviceBuffer[MF_MAX_DEVICEMEM] = {0};
-#endif
+alignas(max_align_t) static uint8_t deviceBuffer[MF_MAX_DEVICEMEM] = {0};
+static size_t nextPointer = 0;
 
-uint16_t nextPointer = 0;
-
-#ifdef ARDUINO_ARCH_AVR
-uint8_t *allocateMemory(uint16_t size)
-#else
-std::size_t *allocateMemory(uint16_t size)
-#endif
+static size_t alignUp(size_t value, size_t alignment)
 {
-    uint16_t actualPointer = nextPointer;
-    nextPointer            = actualPointer + size;
-    if (nextPointer >= MF_MAX_DEVICEMEM) {
+    return (value + alignment - 1u) & ~(alignment - 1u);
+}
+
+void* allocateMemory(size_t size, size_t alignment)
+{
+    if (size == 0) {
+        return nullptr;
+    }
+
+    if (alignment == 0) {
+        alignment = 1;
+    }
+
+    size_t actualPointer = alignUp(nextPointer, alignment);
+    size_t newPointer    = actualPointer + size;
+
+    if (newPointer > MF_MAX_DEVICEMEM) {
         cmdMessenger.sendCmd(kStatus, F("DeviceBuffer Overflow!"));
         return nullptr;
     }
+
 #ifdef DEBUG2CMDMESSENGER
     cmdMessenger.sendCmdStart(kDebug);
     cmdMessenger.sendCmdArg(F("Bytes added"));
@@ -37,6 +43,8 @@ std::size_t *allocateMemory(uint16_t size)
     cmdMessenger.sendCmdArg(nextPointer);
     cmdMessenger.sendCmdEnd();
 #endif
+
+    nextPointer = newPointer;
     return &deviceBuffer[actualPointer];
 }
 
@@ -45,16 +53,25 @@ void ClearMemory()
     nextPointer = 0;
 }
 
-uint16_t GetAvailableMemory()
+size_t GetAvailableMemory()
 {
     return MF_MAX_DEVICEMEM - nextPointer;
 }
 
-bool FitInMemory(uint16_t size)
+bool FitInMemory(size_t size, size_t alignment)
 {
-    if (nextPointer + size > MF_MAX_DEVICEMEM)
-        return false;
-    return true;
+    if (size == 0) {
+        return true;
+    }
+
+    if (alignment == 0) {
+        alignment = 1;
+    }
+
+    size_t actualPointer = alignUp(nextPointer, alignment);
+    size_t newPointer    = actualPointer + size;
+
+    return (newPointer <= MF_MAX_DEVICEMEM);
 }
 
 // allocatemem.cpp

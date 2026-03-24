@@ -19,7 +19,7 @@ namespace Servos
     {
         if (!FitInMemory(sizeof(MFServo) * count))
             return false;
-        servos    = new (allocateMemory(sizeof(MFServo) * count)) MFServo;
+        servos = allocateArray<MFServo>(count);
         maxServos = count;
         return true;
     }

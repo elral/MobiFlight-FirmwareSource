@@ -30,7 +30,7 @@ namespace Stepper
     {
         if (!FitInMemory(sizeof(MFStepper) * count))
             return false;
-        steppers    = new (allocateMemory(sizeof(MFStepper) * count)) MFStepper;
+        steppers = allocateArray<MFStepper>(count);
         maxSteppers = count;
         return true;
     }

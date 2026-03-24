@@ -19,7 +19,7 @@ namespace OutputShifter
     {
         if (!FitInMemory(sizeof(MFOutputShifter) * count))
             return false;
-        outputShifter    = new (allocateMemory(sizeof(MFOutputShifter) * count)) MFOutputShifter;
+        outputShifter = allocateArray<MFOutputShifter>(count);
         maxOutputShifter = count;
         return true;
     }

@@ -33,7 +33,7 @@ namespace CustomDevice
     {
         if (!FitInMemory(sizeof(MFCustomDevice) * count))
             return false;
-        customDevice     = new (allocateMemory(sizeof(MFCustomDevice) * count)) MFCustomDevice();
+        customDevice     = allocateArray<MFCustomDevice>(count);
         maxCustomDevices = count;
         return true;
     }

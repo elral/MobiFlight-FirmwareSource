@@ -19,7 +19,7 @@ namespace LCDDisplay
     {
         if (!FitInMemory(sizeof(MFLCDDisplay) * count))
             return false;
-        lcd_I2C    = new (allocateMemory(sizeof(MFLCDDisplay) * count)) MFLCDDisplay;
+        lcd_I2C = allocateArray<MFLCDDisplay>(count);
         maxLCD_I2C = count;
         return true;
     }
