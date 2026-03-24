@@ -9,10 +9,21 @@
 #include <Arduino.h>
 #include <new>
 
-void* allocateMemory(size_t size, size_t alignment = alignof(max_align_t));
-void  ClearMemory();
+#ifdef ARDUINO_ARCH_AVR
+
+void*    allocateMemory(uint16_t size);
+void     ClearMemory();
+uint16_t GetAvailableMemory();
+bool     FitInMemory(uint16_t size);
+
+#else
+
+void*  allocateMemory(size_t size, size_t alignment = alignof(max_align_t));
+void   ClearMemory();
 size_t GetAvailableMemory();
-bool  FitInMemory(size_t size, size_t alignment = alignof(max_align_t));
+bool   FitInMemory(size_t size, size_t alignment = alignof(max_align_t));
+
+#endif
 
 template <typename T, typename... Args>
 T* allocateObject(Args&&... args)
