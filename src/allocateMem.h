@@ -46,6 +46,6 @@ uint16_t-Array
     _values = static_cast<uint16_t*>(MF_ALLOC_TYPE(uint16_t, count));
 
 uint32_t-Array
-    _values = static_cast<uint32_t*>(MF_ALLOC_TYPE(uint16_t, count));
+    _values = static_cast<uint32_t*>(MF_ALLOC_TYPE(uint32_t, count));
 
 */
