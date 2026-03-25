@@ -9,60 +9,43 @@
 #include <Arduino.h>
 #include <new>
 
-#ifdef ARDUINO_ARCH_AVR
-void    *allocateMemory(uint16_t size);
-void     ClearMemory();
-uint16_t GetAvailableMemory();
-bool     FitInMemory(uint16_t size);
-#else
+#define MF_ALLOC_BYTES(count)   allocateMemory((size_t)(count), 1)
+#define MF_ALLOC_TYPE(T, count) allocateMemory((size_t)(sizeof(T) * (count)), alignof(T))
+
 void  *allocateMemory(size_t size, size_t alignment = alignof(max_align_t));
 void   ClearMemory();
 size_t GetAvailableMemory();
 bool   FitInMemory(size_t size, size_t alignment = alignof(max_align_t));
 
-template <typename T, typename... Args>
-// Class with Default-Konstruktor
-T *allocateObject(Args &&...args)
-{
-    void *mem = allocateMemory(sizeof(T), alignof(T));
-    if (!mem) return nullptr;
-    return new (mem) T(static_cast<Args &&>(args)...);
-}
-
-// Array of Classes with Default-Konstruktor
-template <typename T>
-T *allocateArray(size_t count)
-{
-    if (count == 0) return nullptr;
-
-    void *mem = allocateMemory(sizeof(T) * count, alignof(T));
-    if (!mem) return nullptr;
-
-    T *arr = static_cast<T *>(mem);
-
-    for (size_t i = 0; i < count; ++i) {
-        new (&arr[i]) T();
-    }
-
-    return arr;
-}
-
-// Array of Classes with all Elements of same Arguments
-template <typename T, typename... Args>
-T *allocateArray(size_t count, Args... args)
-{
-    if (count == 0) return nullptr;
-
-    void *mem = allocateMemory(sizeof(T) * count, alignof(T));
-    if (!mem) return nullptr;
-
-    T *arr = static_cast<T *>(mem);
-
-    for (size_t i = 0; i < count; ++i) {
-        new (&arr[i]) T(args...);
-    }
-
-    return arr;
-}
-#endif
 // allocatemem.h
+
+/*
+Single Object
+    either:
+        void* mem = MF_ALLOC_TYPE(AccelStepper, 1);
+        if (mem) {
+            _stepper = new (mem) AccelStepper(AccelStepper::DRIVER, pin1, pin2);
+        } else {
+            // handle error
+            return;
+        }
+    or:
+        if (!FitInMemory(sizeof(AccelStepper))) {
+            // handle error
+            return;
+        }
+        _stepper = new (MF_ALLOC_TYPE(AccelStepper, 1)) AccelStepper(AccelStepper::DRIVER, pin1, pin2);
+
+Object array
+    _encoders = static_cast<MFEncoder*>(MF_ALLOC_TYPE(MFEncoder, count));
+
+uint8_t-Array
+    _buffer = static_cast<uint8_t*>(MF_ALLOC_BYTES(count));
+
+uint16_t-Array
+    _values = static_cast<uint16_t*>(MF_ALLOC_TYPE(uint16_t, count));
+
+uint32_t-Array
+    _values = static_cast<uint32_t*>(MF_ALLOC_TYPE(uint16_t, count));
+
+*/

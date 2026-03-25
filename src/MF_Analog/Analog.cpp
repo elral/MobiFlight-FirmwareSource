@@ -29,13 +29,9 @@ namespace Analog
 
     bool setupArray(uint16_t count)
     {
-        if (!FitInMemory(sizeof(MFAnalog) * count))
-            return false;
-#ifdef ARDUINO_ARCH_AVR
-        analog = new (allocateMemory(sizeof(MFAnalog) * count)) MFAnalog;
-#else
-        analog = allocateArray<MFAnalog>(count);
-#endif
+        analog = static_cast<MFAnalog *>(MF_ALLOC_TYPE(MFAnalog, count));
+        if (!analog) return false;
+
         maxAnalogIn = count;
         return true;
     }

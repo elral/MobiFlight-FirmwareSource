@@ -31,13 +31,9 @@ namespace CustomDevice
 
     bool setupArray(uint16_t count)
     {
-        if (!FitInMemory(sizeof(MFCustomDevice) * count))
-            return false;
-#ifdef ARDUINO_ARCH_AVR
-        customDevice = new (allocateMemory(sizeof(MFCustomDevice) * count)) MFCustomDevice();
-#else
-        customDevice = allocateArray<MFCustomDevice>(count);
-#endif
+        customDevice = static_cast<MFCustomDevice *>(MF_ALLOC_TYPE(MFCustomDevice, count));
+        if (!customDevice) return false;
+
         maxCustomDevices = count;
         return true;
     }

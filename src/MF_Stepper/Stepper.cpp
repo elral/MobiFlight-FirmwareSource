@@ -28,13 +28,8 @@ namespace Stepper
 
     bool setupArray(uint16_t count)
     {
-        if (!FitInMemory(sizeof(MFStepper) * count))
-            return false;
-#ifdef ARDUINO_ARCH_AVR
-        steppers = new (allocateMemory(sizeof(MFStepper) * count)) MFStepper;
-#else
-        steppers = allocateArray<MFStepper>(count);
-#endif
+        steppers = static_cast<MFStepper *>(MF_ALLOC_TYPE(MFStepper, count));
+        if (!steppers) return false;
 
         maxSteppers = count;
         return true;

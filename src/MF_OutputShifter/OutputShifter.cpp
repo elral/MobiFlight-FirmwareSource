@@ -17,13 +17,8 @@ namespace OutputShifter
 
     bool setupArray(uint16_t count)
     {
-        if (!FitInMemory(sizeof(MFOutputShifter) * count))
-            return false;
-#ifdef ARDUINO_ARCH_AVR
-        outputShifter = new (allocateMemory(sizeof(MFOutputShifter) * count)) MFOutputShifter;
-#else
-        outputShifter = allocateArray<MFOutputShifter>(count);
-#endif
+        outputShifter = static_cast<MFOutputShifter *>(MF_ALLOC_TYPE(MFOutputShifter, count));
+        if (!outputShifter) return false;
 
         maxOutputShifter = count;
         return true;

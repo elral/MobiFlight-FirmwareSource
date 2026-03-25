@@ -17,13 +17,8 @@ namespace LedSegment
 
     bool setupArray(uint16_t count)
     {
-        if (!FitInMemory(sizeof(MFSegments) * count))
-            return false;
-#ifdef ARDUINO_ARCH_AVR
-        ledSegments = new (allocateMemory(sizeof(MFSegments) * count)) MFSegments;
-#else
-        ledSegments = allocateArray<MFSegments>(count);
-#endif
+        ledSegments = static_cast<MFSegments *>(MF_ALLOC_TYPE(MFSegments, count));
+        if (!ledSegments) return false;
 
         ledSegmentsRegistereds = count;
         return true;

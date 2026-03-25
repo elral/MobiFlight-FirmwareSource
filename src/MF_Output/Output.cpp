@@ -17,13 +17,9 @@ namespace Output
 
     bool setupArray(uint16_t count)
     {
-        if (!FitInMemory(sizeof(MFOutput) * count))
-            return false;
-#ifdef ARDUINO_ARCH_AVR
-        outputs = new (allocateMemory(sizeof(MFOutput) * count)) MFOutput;
-#else
-        outputs = allocateArray<MFOutput>(count);
-#endif
+        outputs = static_cast<MFOutput *>(MF_ALLOC_TYPE(MFOutput, count));
+        if (!outputs) return false;
+
         maxOutputs = count;
         return true;
     }

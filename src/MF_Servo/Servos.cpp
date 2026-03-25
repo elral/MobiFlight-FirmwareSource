@@ -17,13 +17,8 @@ namespace Servos
 
     bool setupArray(uint16_t count)
     {
-        if (!FitInMemory(sizeof(MFServo) * count))
-            return false;
-#ifdef ARDUINO_ARCH_AVR
-        servos = new (allocateMemory(sizeof(MFServo) * count)) MFServo;
-#else
-        servos = allocateArray<MFServo>(count);
-#endif
+        servos = static_cast<MFServo *>(MF_ALLOC_TYPE(MFServo, count));
+        if (!servos) return false;
 
         maxServos = count;
         return true;

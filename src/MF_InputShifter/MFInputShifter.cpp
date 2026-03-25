@@ -28,13 +28,8 @@ bool MFInputShifter::attach(uint8_t latchPin, uint8_t clockPin, uint8_t dataPin,
     pinMode(_clockPin, OUTPUT);
     pinMode(_dataPin, INPUT);
 
-    if (!FitInMemory(sizeof(uint8_t) * _moduleCount))
-        return false;
-#ifdef ARDUINO_ARCH_AVR
-    _lastState = new (allocateMemory(sizeof(uint8_t) * _moduleCount)) uint8_t;
-#else
-    _lastState = static_cast<uint8_t *>(allocateMemory(sizeof(uint8_t) * _moduleCount, alignof(uint8_t)));
-#endif
+    _lastState = static_cast<uint8_t *>(MF_ALLOC_BYTES(_moduleCount));
+    if (!_lastState) return false;
 
     for (uint8_t i = 0; i < _moduleCount; i++) {
         _lastState[i] = 0;

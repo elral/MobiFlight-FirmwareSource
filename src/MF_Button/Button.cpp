@@ -28,13 +28,8 @@ namespace Button
 
     bool setupArray(uint16_t count)
     {
-        if (!FitInMemory(sizeof(MFButton) * count))
-            return false;
-#ifdef ARDUINO_ARCH_AVR
-        buttons = new (allocateMemory(sizeof(MFButton) * count)) MFButton;
-#else
-        buttons = allocateArray<MFButton>(count);
-#endif
+        buttons = static_cast<MFButton *>(MF_ALLOC_TYPE(MFButton, count));
+        if (!buttons) return false;
 
         maxButtons = count;
         return true;

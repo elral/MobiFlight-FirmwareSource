@@ -29,13 +29,8 @@ namespace InputShifter
 
     bool setupArray(uint16_t count)
     {
-        if (!FitInMemory(sizeof(MFInputShifter) * count))
-            return false;
-#ifdef ARDUINO_ARCH_AVR
-        inputShifter = new (allocateMemory(sizeof(MFInputShifter) * count)) MFInputShifter;
-#else
-        inputShifter = allocateArray<MFInputShifter>(count);
-#endif
+        inputShifter = static_cast<MFInputShifter *>(MF_ALLOC_TYPE(MFInputShifter, count));
+        if (!inputShifter) return false;
 
         maxInputShifter = count;
         return true;

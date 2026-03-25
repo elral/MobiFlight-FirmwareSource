@@ -28,13 +28,9 @@ namespace Encoder
 
     bool setupArray(uint16_t count)
     {
-        if (!FitInMemory(sizeof(MFEncoder) * count))
-            return false;
-#ifdef ARDUINO_ARCH_AVR
-        encoders = new (allocateMemory(sizeof(MFEncoder) * count)) MFEncoder;
-#else
-        encoders = allocateArray<MFEncoder>(count);
-#endif
+        encoders = static_cast<MFEncoder *>(MF_ALLOC_TYPE(MFEncoder, count));
+        if (!encoders) return false;
+
         maxEncoders = count;
         return true;
     }
