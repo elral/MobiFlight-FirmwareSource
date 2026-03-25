@@ -19,7 +19,12 @@ namespace LedSegment
     {
         if (!FitInMemory(sizeof(MFSegments) * count))
             return false;
+#ifdef ARDUINO_ARCH_AVR
+        ledSegments = new (allocateMemory(sizeof(MFSegments) * count)) MFSegments;
+#else
         ledSegments = allocateArray<MFSegments>(count);
+#endif
+
         ledSegmentsRegistereds = count;
         return true;
     }

@@ -54,8 +54,11 @@ bool MFOutputShifter::attach(uint8_t latchPin, uint8_t clockPin, uint8_t dataPin
 
     if (!FitInMemory(sizeof(uint8_t) * _moduleCount))
         return false;
-
-    _lastState = static_cast<uint8_t*>(allocateMemory(sizeof(uint8_t) * _moduleCount, alignof(uint8_t)));
+#ifdef ARDUINO_ARCH_AVR
+    _lastState = new (allocateMemory(sizeof(uint8_t) * _moduleCount)) uint8_t;
+#else
+    _lastState = static_cast<uint8_t *>(allocateMemory(sizeof(uint8_t) * _moduleCount, alignof(uint8_t)));
+#endif
 
     clear();
 

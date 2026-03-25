@@ -10,9 +10,9 @@
 #ifdef ARDUINO_ARCH_AVR
 
 static uint8_t  deviceBuffer[MF_MAX_DEVICEMEM] = {0};
-static uint16_t nextPointer = 0;
+static uint16_t nextPointer                    = 0;
 
-void* allocateMemory(uint16_t size)
+void *allocateMemory(uint16_t size)
 {
     uint16_t actualPointer = nextPointer;
     uint16_t newPointer    = actualPointer + size;
@@ -21,6 +21,7 @@ void* allocateMemory(uint16_t size)
         cmdMessenger.sendCmd(kStatus, F("DeviceBuffer Overflow!"));
         return nullptr;
     }
+    nextPointer = newPointer;
 #ifdef DEBUG2CMDMESSENGER
     cmdMessenger.sendCmdStart(kDebug);
     cmdMessenger.sendCmdArg(F("Bytes added"));
@@ -31,7 +32,6 @@ void* allocateMemory(uint16_t size)
     cmdMessenger.sendCmdArg(nextPointer);
     cmdMessenger.sendCmdEnd();
 #endif
-    nextPointer = newPointer;
     return &deviceBuffer[actualPointer];
 }
 
@@ -52,17 +52,15 @@ bool FitInMemory(uint16_t size)
 
 #else
 
-
-//alignas(max_align_t) static uint8_t deviceBuffer[MF_MAX_DEVICEMEM] = {0};
 alignas(max_align_t) static uint8_t deviceBuffer[MF_MAX_DEVICEMEM] = {0};
-static size_t nextPointer = 0;
+static size_t nextPointer                                          = 0;
 
 static size_t alignUp(size_t value, size_t alignment)
 {
     return (value + alignment - 1u) & ~(alignment - 1u);
 }
 
-void* allocateMemory(size_t size, size_t alignment)
+void *allocateMemory(size_t size, size_t alignment)
 {
     if (size == 0) {
         return nullptr;
@@ -90,7 +88,6 @@ void* allocateMemory(size_t size, size_t alignment)
     cmdMessenger.sendCmdArg(nextPointer);
     cmdMessenger.sendCmdEnd();
 #endif
-
     return &deviceBuffer[actualPointer];
 }
 
@@ -113,7 +110,6 @@ bool FitInMemory(size_t size, size_t alignment)
     if (alignment == 0) {
         alignment = 1;
     }
-
     size_t actualPointer = alignUp(nextPointer, alignment);
     size_t newPointer    = actualPointer + size;
 

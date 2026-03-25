@@ -31,7 +31,11 @@ namespace Analog
     {
         if (!FitInMemory(sizeof(MFAnalog) * count))
             return false;
+#ifdef ARDUINO_ARCH_AVR
+        analog = new (allocateMemory(sizeof(MFAnalog) * count)) MFAnalog;
+#else
         analog = allocateArray<MFAnalog>(count);
+#endif
         maxAnalogIn = count;
         return true;
     }

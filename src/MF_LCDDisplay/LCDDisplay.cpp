@@ -19,7 +19,12 @@ namespace LCDDisplay
     {
         if (!FitInMemory(sizeof(MFLCDDisplay) * count))
             return false;
+#ifdef ARDUINO_ARCH_AVR
+        lcd_I2C = new (allocateMemory(sizeof(MFLCDDisplay) * count)) MFLCDDisplay;
+#else
         lcd_I2C = allocateArray<MFLCDDisplay>(count);
+#endif
+
         maxLCD_I2C = count;
         return true;
     }

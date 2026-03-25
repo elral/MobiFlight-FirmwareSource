@@ -19,7 +19,12 @@ namespace Servos
     {
         if (!FitInMemory(sizeof(MFServo) * count))
             return false;
+#ifdef ARDUINO_ARCH_AVR
+        servos = new (allocateMemory(sizeof(MFServo) * count)) MFServo;
+#else
         servos = allocateArray<MFServo>(count);
+#endif
+
         maxServos = count;
         return true;
     }

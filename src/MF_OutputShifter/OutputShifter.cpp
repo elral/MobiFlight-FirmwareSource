@@ -19,7 +19,12 @@ namespace OutputShifter
     {
         if (!FitInMemory(sizeof(MFOutputShifter) * count))
             return false;
+#ifdef ARDUINO_ARCH_AVR
+        outputShifter = new (allocateMemory(sizeof(MFOutputShifter) * count)) MFOutputShifter;
+#else
         outputShifter = allocateArray<MFOutputShifter>(count);
+#endif
+
         maxOutputShifter = count;
         return true;
     }

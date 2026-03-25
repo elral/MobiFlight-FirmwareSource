@@ -19,7 +19,11 @@ namespace Output
     {
         if (!FitInMemory(sizeof(MFOutput) * count))
             return false;
+#ifdef ARDUINO_ARCH_AVR
+        outputs = new (allocateMemory(sizeof(MFOutput) * count)) MFOutput;
+#else
         outputs = allocateArray<MFOutput>(count);
+#endif
         maxOutputs = count;
         return true;
     }
@@ -47,8 +51,8 @@ namespace Output
     void OnSet()
     {
         // Read led state argument, interpret string as boolean
-        int output   = cmdMessenger.readInt16Arg();
-        int state = cmdMessenger.readInt16Arg();
+        int output = cmdMessenger.readInt16Arg();
+        int state  = cmdMessenger.readInt16Arg();
 
         outputs[output].set(state);
     }

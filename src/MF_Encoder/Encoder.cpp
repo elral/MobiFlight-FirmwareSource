@@ -30,7 +30,11 @@ namespace Encoder
     {
         if (!FitInMemory(sizeof(MFEncoder) * count))
             return false;
+#ifdef ARDUINO_ARCH_AVR
+        encoders = new (allocateMemory(sizeof(MFEncoder) * count)) MFEncoder;
+#else
         encoders = allocateArray<MFEncoder>(count);
+#endif
         maxEncoders = count;
         return true;
     }

@@ -30,7 +30,12 @@ namespace Button
     {
         if (!FitInMemory(sizeof(MFButton) * count))
             return false;
-        buttons    = new (allocateMemory(sizeof(MFButton) * count)) MFButton;
+#ifdef ARDUINO_ARCH_AVR
+        buttons = new (allocateMemory(sizeof(MFButton) * count)) MFButton;
+#else
+        buttons = allocateArray<MFButton>(count);
+#endif
+
         maxButtons = count;
         return true;
     }

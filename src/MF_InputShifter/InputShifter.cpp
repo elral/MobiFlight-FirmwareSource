@@ -31,7 +31,12 @@ namespace InputShifter
     {
         if (!FitInMemory(sizeof(MFInputShifter) * count))
             return false;
+#ifdef ARDUINO_ARCH_AVR
+        inputShifter = new (allocateMemory(sizeof(MFInputShifter) * count)) MFInputShifter;
+#else
         inputShifter = allocateArray<MFInputShifter>(count);
+#endif
+
         maxInputShifter = count;
         return true;
     }

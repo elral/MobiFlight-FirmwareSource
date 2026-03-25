@@ -33,7 +33,11 @@ namespace DigInMux
     {
         if (!FitInMemory(sizeof(MFDigInMux) * count))
             return false;
+#ifdef ARDUINO_ARCH_AVR
+        digInMux = new (allocateMemory(sizeof(MFDigInMux) * count)) MFDigInMux;
+#else
         digInMux = allocateArray<MFDigInMux>(count);
+#endif
         maxDigInMux = count;
         return true;
     }
