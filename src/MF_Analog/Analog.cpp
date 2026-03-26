@@ -29,6 +29,7 @@ namespace Analog
 
     bool setupArray(uint16_t count)
     {
+        if (!count) return true;
         analog = static_cast<MFAnalog *>(MF_ALLOC_TYPE(MFAnalog, count));
         if (!analog) return false;
 

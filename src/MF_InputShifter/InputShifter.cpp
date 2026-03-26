@@ -29,6 +29,7 @@ namespace InputShifter
 
     bool setupArray(uint16_t count)
     {
+        if (!count) return true;
         inputShifter = static_cast<MFInputShifter *>(MF_ALLOC_TYPE(MFInputShifter, count));
         if (!inputShifter) return false;
 

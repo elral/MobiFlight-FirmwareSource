@@ -17,6 +17,7 @@ namespace LCDDisplay
 
     bool setupArray(uint16_t count)
     {
+        if (!count) return true;
         lcd_I2C = static_cast<MFLCDDisplay *>(MF_ALLOC_TYPE(MFLCDDisplay, count));
         if (!lcd_I2C) return false;
 

@@ -28,6 +28,7 @@ namespace Button
 
     bool setupArray(uint16_t count)
     {
+        if (!count) return true;
         buttons = static_cast<MFButton *>(MF_ALLOC_TYPE(MFButton, count));
         if (!buttons) return false;
 

@@ -31,6 +31,7 @@ namespace DigInMux
 
     bool setupArray(uint16_t count)
     {
+        if (!count) return true;
         digInMux = static_cast<MFDigInMux *>(MF_ALLOC_TYPE(MFDigInMux, count));
         if (!digInMux) return false;
 

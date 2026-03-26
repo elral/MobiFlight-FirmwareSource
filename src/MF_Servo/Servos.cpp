@@ -17,6 +17,7 @@ namespace Servos
 
     bool setupArray(uint16_t count)
     {
+        if (!count) return true;
         servos = static_cast<MFServo *>(MF_ALLOC_TYPE(MFServo, count));
         if (!servos) return false;
 

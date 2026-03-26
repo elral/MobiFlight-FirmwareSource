@@ -28,6 +28,7 @@ namespace Encoder
 
     bool setupArray(uint16_t count)
     {
+        if (!count) return true;
         encoders = static_cast<MFEncoder *>(MF_ALLOC_TYPE(MFEncoder, count));
         if (!encoders) return false;
 

@@ -31,6 +31,7 @@ namespace CustomDevice
 
     bool setupArray(uint16_t count)
     {
+        if (!count) return true;
         customDevice = static_cast<MFCustomDevice *>(MF_ALLOC_TYPE(MFCustomDevice, count));
         if (!customDevice) return false;
 

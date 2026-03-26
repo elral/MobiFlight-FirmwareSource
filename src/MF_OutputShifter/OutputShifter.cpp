@@ -17,6 +17,7 @@ namespace OutputShifter
 
     bool setupArray(uint16_t count)
     {
+        if (!count) return true;
         outputShifter = static_cast<MFOutputShifter *>(MF_ALLOC_TYPE(MFOutputShifter, count));
         if (!outputShifter) return false;
 

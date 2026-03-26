@@ -17,6 +17,7 @@ namespace LedSegment
 
     bool setupArray(uint16_t count)
     {
+        if (!count) return true;
         ledSegments = static_cast<MFSegments *>(MF_ALLOC_TYPE(MFSegments, count));
         if (!ledSegments) return false;
 

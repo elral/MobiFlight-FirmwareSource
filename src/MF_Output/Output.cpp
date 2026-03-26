@@ -17,6 +17,7 @@ namespace Output
 
     bool setupArray(uint16_t count)
     {
+        if (!count) return true;
         outputs = static_cast<MFOutput *>(MF_ALLOC_TYPE(MFOutput, count));
         if (!outputs) return false;
 

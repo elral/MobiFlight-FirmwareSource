@@ -28,6 +28,7 @@ namespace Stepper
 
     bool setupArray(uint16_t count)
     {
+        if (!count) return true;
         steppers = static_cast<MFStepper *>(MF_ALLOC_TYPE(MFStepper, count));
         if (!steppers) return false;
 

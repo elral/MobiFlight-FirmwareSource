@@ -28,7 +28,7 @@ void *allocateMemory(size_t size, size_t alignment)
         return nullptr;
     }
     nextPointer = newPointer;
-#ifndef DEBUG2CMDMESSENGER
+#ifdef DEBUG2CMDMESSENGER
     cmdMessenger.sendCmdStart(kDebug);
     cmdMessenger.sendCmdArg(F("Bytes added"));
     cmdMessenger.sendCmdArg(size);
