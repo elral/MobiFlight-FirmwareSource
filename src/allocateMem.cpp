@@ -50,16 +50,4 @@ size_t GetAvailableMemory()
 {
     return MF_MAX_DEVICEMEM - nextPointer;
 }
-
-bool FitInMemory(size_t size, size_t alignment)
-{
-    if (size == 0) return true;
-    if (alignment == 0) alignment = 1;
-
-    size_t actualPointer = alignUp(nextPointer, alignment);
-    size_t newPointer    = actualPointer + size;
-
-    return (newPointer <= MF_MAX_DEVICEMEM);
-}
-
 // allocatemem.cpp

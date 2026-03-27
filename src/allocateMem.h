@@ -15,26 +15,18 @@
 void  *allocateMemory(size_t size, size_t alignment = alignof(max_align_t));
 void   ClearMemory();
 size_t GetAvailableMemory();
-bool   FitInMemory(size_t size, size_t alignment = alignof(max_align_t));
 
 // allocatemem.h
 
 /*
-Single Object
-    either:
-        void* mem = MF_ALLOC_TYPE(AccelStepper, 1);
-        if (mem) {
-            _stepper = new (mem) AccelStepper(AccelStepper::DRIVER, pin1, pin2);
-        } else {
-            // handle error
-            return;
-        }
-    or:
-        if (!FitInMemory(sizeof(AccelStepper))) {
-            // handle error
-            return;
-        }
-        _stepper = new (MF_ALLOC_TYPE(AccelStepper, 1)) AccelStepper(AccelStepper::DRIVER, pin1, pin2);
+Single Object, avoids calling 'placement new' with nullptr
+    void* mem = MF_ALLOC_TYPE(AccelStepper, 1);
+    if (mem) {
+        _stepper = new (mem) AccelStepper(AccelStepper::DRIVER, pin1, pin2);
+    } else {
+        // handle error
+        return;
+    }
 
 Object array
     _encoders = static_cast<MFEncoder*>(MF_ALLOC_TYPE(MFEncoder, count));
