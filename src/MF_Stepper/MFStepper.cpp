@@ -58,9 +58,6 @@ void MFStepper::attach(uint8_t pin1, uint8_t pin2, uint8_t pin3, uint8_t pin4, u
         return;
         break;
     }
-    // Checking if the class could be initialized is missing!
-    // attach() must be changed from void to bool and add() in
-    // stepper.cpp must also be changed
     _stepper->setMaxSpeed(maxSpeed);
     _stepper->setAcceleration(Accel);
     _zeroPin      = btnPin5;
