@@ -3,12 +3,12 @@
 //
 // (C) MobiFlight Project 2022
 //
-// 
+//
 // Single Object with constructor, avoids calling 'placement new' with nullptr
 //      void* mem = MF_ALLOC_TYPE(AccelStepper, 1);
 //      if (!mem) return false;
 //      _stepper = new (mem) AccelStepper(AccelStepper::DRIVER, pin1, pin2);
-// 
+//
 // Object array with paramters in class, calls the constructor
 //      MFTestClass* _testClass = static_cast<MFTestClass*>(MF_ALLOC_TYPE(MFTestClass, count));
 //      if (!_testClass) return false;
@@ -26,13 +26,13 @@
 //
 // uint8_t-Array
 //      _buffer = static_cast<uint8_t*>(MF_ALLOC_BYTES(count));
-// 
+//
 // uint16_t-Array
 //      _values = static_cast<uint16_t*>(MF_ALLOC_TYPE(uint16_t, count));
-// 
+//
 // uint32_t-Array
 //      _values = static_cast<uint32_t*>(MF_ALLOC_TYPE(uint32_t, count));
-// 
+//
 
 #pragma once
 
