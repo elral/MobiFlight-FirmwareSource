@@ -29,7 +29,8 @@ namespace Servos
     {
         if (servosRegistered == maxServos)
             return;
-        servos[servosRegistered] = MFServo();
+
+        new (&servos[servosRegistered]) MFServo();
         servos[servosRegistered].attach(pin, true);
         servosRegistered++;
 #ifdef DEBUG2CMDMESSENGER

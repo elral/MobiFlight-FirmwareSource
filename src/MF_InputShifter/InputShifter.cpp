@@ -41,7 +41,8 @@ namespace InputShifter
     {
         if (inputShifterRegistered == maxInputShifter)
             return;
-        inputShifter[inputShifterRegistered] = MFInputShifter();
+
+        new (&inputShifter[inputShifterRegistered]) MFInputShifter();
         if (!inputShifter[inputShifterRegistered].attach(latchPin, clockPin, dataPin, modules, name)) {
             cmdMessenger.sendCmd(kStatus, F("InputShifter array does not fit into Memory"));
             return;

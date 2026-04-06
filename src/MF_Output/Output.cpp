@@ -29,7 +29,8 @@ namespace Output
     {
         if (outputsRegistered == maxOutputs)
             return;
-        outputs[outputsRegistered] = MFOutput();
+
+        new (&outputs[outputsRegistered]) MFOutput();
         outputs[outputsRegistered].attach(pin);
         outputsRegistered++;
 #ifdef DEBUG2CMDMESSENGER

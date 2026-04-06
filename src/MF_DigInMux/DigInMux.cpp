@@ -43,7 +43,7 @@ namespace DigInMux
     {
         if (digInMuxRegistered == maxDigInMux)
             return;
-        digInMux[digInMuxRegistered] = MFDigInMux(&MUX, name);
+        new (&digInMux[digInMuxRegistered]) MFDigInMux(&MUX, name);
         digInMux[digInMuxRegistered].attach(dataPin, (nRegs == 1), name);
         MFDigInMux::attachHandler(handlerOnDigInMux);
         digInMuxRegistered++;

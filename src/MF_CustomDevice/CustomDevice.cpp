@@ -43,7 +43,7 @@ namespace CustomDevice
     {
         if (customDeviceRegistered == maxCustomDevices)
             return;
-        customDevice[customDeviceRegistered] = MFCustomDevice();
+        new (&customDevice[customDeviceRegistered]) MFCustomDevice();
         customDevice[customDeviceRegistered].attach(adrPin, adrType, adrConfig, configFromFlash);
         customDeviceRegistered++;
 #ifdef DEBUG2CMDMESSENGER

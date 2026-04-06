@@ -29,7 +29,8 @@ namespace LCDDisplay
     {
         if (lcd_12cRegistered == maxLCD_I2C)
             return;
-        lcd_I2C[lcd_12cRegistered] = MFLCDDisplay();
+
+        new (&lcd_I2C[lcd_12cRegistered]) MFLCDDisplay();
         lcd_I2C[lcd_12cRegistered].attach(address, cols, lines);
         lcd_12cRegistered++;
 #ifdef DEBUG2CMDMESSENGER

@@ -40,7 +40,7 @@ namespace Encoder
     {
         if (encodersRegistered == maxEncoders)
             return;
-        encoders[encodersRegistered] = MFEncoder();
+        new (&encoders[encodersRegistered]) MFEncoder();
         encoders[encodersRegistered].attach(pin1, pin2, encoder_type, name);
         MFEncoder::attachHandler(handlerOnEncoder);
         encodersRegistered++;
