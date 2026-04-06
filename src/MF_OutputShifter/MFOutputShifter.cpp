@@ -90,7 +90,7 @@ void MFOutputShifter::powerSavingMode(bool state)
     if (state) {
         digitalWrite(_latchPin, LOW);
         for (uint8_t i = _moduleCount; i > 0; i--) {
-            shiftOut(_dataPin, _clockPin, MSBFIRST, 0xFF * MF_LOW);
+            shiftOutData(_dataPin, _clockPin, MSBFIRST, 0xFF * MF_LOW);
         }
         digitalWrite(_latchPin, HIGH);
     } else {

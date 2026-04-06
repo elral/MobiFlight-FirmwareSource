@@ -22,7 +22,7 @@
     "FriendlyName": "Raspberry Pico2",
     "LatestFirmwareVersion": "0.0.1",
     "MobiFlightType": "MobiFlight RaspiPico2",
-    "ResetFirmwareFile": "reset.arduino_raspberrypico2_1_0_2.uf2"
+    "ResetFirmwareFile": "reset.raspberry_pico2_1_0_2.uf2"
   },
   "ModuleLimits": {
     "MaxAnalogInputs": 3,

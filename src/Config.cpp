@@ -14,6 +14,9 @@
 #if !defined(ARDUINO_ARCH_AVR) && !defined(ARDUINO_ARCH_RP2040)
 #include "ArduinoUniqueID.h"
 #endif
+#ifdef ARDUINO_ARCH_RP2040
+#include <pico/unique_id.h>
+#endif
 
 #ifdef MF_ANALOG_SUPPORT
 #include "Analog.h"
