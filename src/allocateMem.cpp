@@ -21,13 +21,14 @@ void *allocateMemory(size_t size, size_t alignment)
     if (alignment == 0) alignment = 1;
 
     size_t actualPointer = alignUp(nextPointer, alignment);
-    size_t newPointer    = actualPointer + size;
 
-    if (newPointer > MF_MAX_DEVICEMEM) {
+    if (actualPointer > MF_MAX_DEVICEMEM || size > MF_MAX_DEVICEMEM - actualPointer) {
         cmdMessenger.sendCmd(kStatus, F("DeviceBuffer Overflow!"));
         return nullptr;
     }
-    nextPointer = newPointer;
+
+    size_t newPointer = actualPointer + size;
+    nextPointer       = newPointer;
 #ifdef DEBUG2CMDMESSENGER
     cmdMessenger.sendCmdStart(kDebug);
     cmdMessenger.sendCmdArg(F("Bytes added"));
