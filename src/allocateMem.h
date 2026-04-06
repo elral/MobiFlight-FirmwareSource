@@ -9,7 +9,7 @@
 //      if (!mem) return false;
 //      _stepper = new (mem) AccelStepper(AccelStepper::DRIVER, pin1, pin2);
 //
-// Object array with paramters in class, calls the constructor
+// Object array with parameters in class, calls the constructor
 //      MFTestClass* _testClass = static_cast<MFTestClass*>(MF_ALLOC_TYPE(MFTestClass, count));
 //      if (!_testClass) return false;
 //      for (uint8_t i = 0; i < count; i++) {
