@@ -53,6 +53,7 @@ bool MFStepper::attach(uint8_t pin1, uint8_t pin2, uint8_t pin3, uint8_t pin4, u
         break;
     default:
         _initialized = false;
+        return false;
         break;
     }
     _stepper->setMaxSpeed(maxSpeed);
