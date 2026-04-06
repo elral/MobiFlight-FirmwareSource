@@ -12,7 +12,12 @@ static size_t nextPointer                                          = 0;
 
 static size_t alignUp(size_t value, size_t alignment)
 {
-    return (value + alignment - 1u) & ~(alignment - 1u);
+    if (alignment == 0) return value;
+
+    size_t remainder = value % alignment;
+    if (remainder == 0) return value;
+
+    return value + (alignment - remainder);
 }
 
 void *allocateMemory(size_t size, size_t alignment)
