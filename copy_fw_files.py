@@ -26,7 +26,7 @@ def copy_fw_files (source, target, env):
     if os.path.exists(build_path_json) == False:
         os.makedirs(build_path_json)
 
-    if fw_file_name[-3:] == "bin" and platform == "raspberrypi":
+    if platform == "raspberrypi":
         fw_file_name=fw_file_name[0:-3] + "uf2"
 
     if platform == "espressif32":
