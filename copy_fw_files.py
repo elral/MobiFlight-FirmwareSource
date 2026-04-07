@@ -15,7 +15,7 @@ build_path = Path('./_build')
 build_path_fw = build_path / 'firmware'
 build_path_json = build_path / 'Boards'
 distrubution_path = './_dist'
-board_folder = ['./_Boards/Atmel', './_Boards/RaspberryPi', './_Boards/ESP32']
+board_folder = ['./_Boards']
 platform = env.BoardConfig().get("platform", {})
 
 def copy_fw_files (source, target, env):
