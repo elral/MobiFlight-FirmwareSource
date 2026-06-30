@@ -5,6 +5,7 @@
 //
 
 #include "MFOutputShifter.h"
+#include "MFShiftData.h"
 #include "allocateMem.h"
 
 MFOutputShifter::MFOutputShifter()
@@ -52,13 +53,10 @@ bool MFOutputShifter::attach(uint8_t latchPin, uint8_t clockPin, uint8_t dataPin
     pinMode(_clockPin, OUTPUT);
     pinMode(_dataPin, OUTPUT);
 
-    if (!FitInMemory(sizeof(uint8_t) * _moduleCount))
-        return false;
-
-    _lastState = new (allocateMemory(sizeof(uint8_t) * _moduleCount)) uint8_t;
+    _lastState = static_cast<uint8_t*>(MF_ALLOC_BYTES(_moduleCount));
+    if (!_lastState) return false;
 
     clear();
-
     return true;
 }
 
@@ -79,7 +77,7 @@ void MFOutputShifter::update()
 {
     digitalWrite(_latchPin, LOW);
     for (uint8_t i = _moduleCount; i > 0; i--) {
-        shiftOut(_dataPin, _clockPin, MSBFIRST, _lastState[i - 1]); // LSBFIRST, MSBFIRST,
+        shiftOutData(_dataPin, _clockPin, MSBFIRST, _lastState[i - 1]); // LSBFIRST, MSBFIRST,
     }
     digitalWrite(_latchPin, HIGH);
 }
@@ -89,7 +87,7 @@ void MFOutputShifter::powerSavingMode(bool state)
     if (state) {
         digitalWrite(_latchPin, LOW);
         for (uint8_t i = _moduleCount; i > 0; i--) {
-            shiftOut(_dataPin, _clockPin, MSBFIRST, 0xFF * MF_LOW);
+            shiftOutData(_dataPin, _clockPin, MSBFIRST, 0xFF * MF_LOW);
         }
         digitalWrite(_latchPin, HIGH);
     } else {
