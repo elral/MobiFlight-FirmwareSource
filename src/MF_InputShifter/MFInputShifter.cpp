@@ -27,12 +27,11 @@ bool MFInputShifter::attach(uint8_t latchPin, uint8_t clockPin, uint8_t dataPin,
 
     pinMode(_latchPin, OUTPUT);
     pinMode(_clockPin, OUTPUT);
-    pinMode(_dataPin, INPUT);
+    pinMode(_dataPin, INPUT_PULLUP);
 
-    if (!FitInMemory(sizeof(uint8_t) * _moduleCount))
-        return false;
+    _lastState = static_cast<uint8_t *>(MF_ALLOC_BYTES(_moduleCount));
+    if (!_lastState) return false;
 
-    _lastState = new (allocateMemory(sizeof(uint8_t) * _moduleCount)) uint8_t;
     for (uint8_t i = 0; i < _moduleCount; i++) {
         _lastState[i] = 0;
     }
@@ -62,7 +61,7 @@ void MFInputShifter::poll(uint8_t doTrigger)
     digitalWrite(_clockPin, HIGH); // Preset clock to retrieve first bit
     digitalWrite(_latchPin, HIGH); // Disable input latching and enable shifting
 
-    // Multiple chained modules are handled one at a time. As shiftIn() keeps getting
+    // Multiple chained modules are handled one at a time. As shiftInData() keeps getting
     // called it will pull in the data from each chained module.
     for (uint8_t module = 0; module < _moduleCount; module++) {
         uint8_t currentState;
