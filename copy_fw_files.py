@@ -13,7 +13,7 @@ firmware_version = firmware_version.strip(".")
 platform = env.BoardConfig().get("platform", {})
 #   atmelavr/raspberrypi/ststm32
 
-zip_file_name = 'Mobiflight-Connector'
+zip_file_name = 'Mobiflight-Firmware'
 build_path = Path('./_build')
 build_path_fw = build_path / 'firmware'
 build_path_json = build_path / 'Boards'
@@ -42,6 +42,8 @@ def copy_fw_files (source, target, env):
     file_extension = '.bin'
     copy_files_by_extension(board_folder, build_path_fw, file_extension)
     file_extension = '.json'
+    copy_files_by_extension(board_folder, build_path_json, file_extension)
+    file_extension = '.png'
     copy_files_by_extension(board_folder, build_path_json, file_extension)
 
     # set FW version within boad.json files
