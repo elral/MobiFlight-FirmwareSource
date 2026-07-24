@@ -56,11 +56,16 @@ namespace OutputShifter
 
     void OnSet()
     {
+        int     module                      = cmdMessenger.readInt16Arg();
+        int     number_of_submodules        = cmdMessenger.readInt16Arg();
+        int     value                       = cmdMessenger.readInt16Arg();
+        uint8_t _pins[number_of_submodules] = {0};
 
-        int   module = cmdMessenger.readInt16Arg();
-        char *pins   = cmdMessenger.readStringArg();
-        int   value  = cmdMessenger.readInt16Arg();
-        outputShifter[module].setPins(pins, value);
+        for (uint8_t i = number_of_submodules; i != 0; i--) {
+            _pins[i-1] = (uint8_t)cmdMessenger.readInt16Arg();
+        }
+
+        outputShifter[module].setPins(_pins, value);
     }
 
     void PowerSave(bool state)
