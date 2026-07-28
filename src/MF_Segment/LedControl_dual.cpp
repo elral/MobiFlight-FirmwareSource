@@ -89,7 +89,7 @@ enum {
 //     Cmd2+Data: (Start + Command + ACK + Data + ACK) * N + Stop +
 //     Cmd3: Start + Command3 + ACK + Stop
 //
-// CmdSetData - Data command settings (byte) - TM1637_I2C_COMM1
+// CmdSetData - Data command settings (byte) - TM1637_I2C_CMD_SETDATA
 // B7 B6 B5 B4 B3 B2 B1 B0 - Function Description
 // 0  1  0  0  _  _  0  0  - (Data read/write) Write data to display register
 // 0  1  0  0  _  _  1  0  - (Data read/write) Read key scan data
@@ -98,7 +98,7 @@ enum {
 // 0  1  0  0  0  _  _  _  - (Test mode) Normal mode
 // 0  1  0  0  1  _  _  _  - (Test mode) Test mode
 //
-// CmdSetAddress - Set Address - Digit (byte) - TM1637_I2C_COMM2
+// CmdSetAddress - Set Address - Digit (byte) - TM1637_I2C_CMD_SETADDRESS
 // B7 B6 B5 B4 B3 B2 B1 B0 - Function Description
 // 1  1  0  0  0  0  0  0  - Digit 1 - C0H Grid1
 // 1  1  0  0  0  0  0  1  - Digit 2 - C1H Grid2
@@ -107,7 +107,7 @@ enum {
 // 1  1  0  0  0  1  0  0  - Digit 5 - C4H Grid5
 // 1  1  0  0  0  1  0  1  - Digit 6 - C5H Grid6
 //
-// CmdDisplay - Set Display - Digit (byte) - TM1637_I2C_COMM3
+// CmdDisplay - Set Display - Digit (byte) - TM1637_I2C_CMD_SETDISPLAY
 // B7 B6 B5 B4 B3 B2 B1 B0 - Function Description
 // 1  0  0  0  _  0  0  0  - Brightness - Pulse width is set as 1/16
 // 1  0  0  0  _  0  0  1  - Brightness - Pulse width is set as 2/16
@@ -120,10 +120,9 @@ enum {
 // 1  0  0  0  0  _  _  _  - Display OFF
 // 1  0  0  0  1  _  _  _  - Display ON
 
-#define TM1637_I2C_COMM1  0x40 // CmdSetData       0b01000000
-#define TM1637_I2C_COMM2  0xC0 // CmdSetAddress    0b11000000
-#define TM1637_I2C_COMM3  0x80 // CmdDisplay       0b10000000
-#define TM1637_I2C_COMM1F 0x44 // CmdSetData - fixedAddress    0b11000100
+#define TM1637_I2C_CMD_SETDATA    0x40 // CmdSetData       0b01000000
+#define TM1637_I2C_CMD_SETADDRESS 0xC0 // CmdSetAddress    0b11000000
+#define TM1637_I2C_CMD_SETDISPLAY 0x80 // CmdDisplay       0b10000000
 
 #define TM1637_4DIGITS 4
 #define TM1637_6DIGITS 6
@@ -175,11 +174,11 @@ bool LedControl::begin(uint8_t type, uint8_t dataPin, uint8_t clkPin, uint8_t cs
         digitBuffer = static_cast<uint8_t *>(MF_ALLOC_BYTES(_numDigits));
         if (!digitBuffer) return false;
 
-        // Both pins are set as inputs, allowing the pull-up resistors to pull them up
-        pinMode(_clkPin, INPUT_PULLUP);
-        pinMode(_dataPin, INPUT_PULLUP);
-        digitalWrite(_clkPin, LOW);  // Prepare '0' value as dominant
-        digitalWrite(_dataPin, LOW); // Prepare '0' value as dominant
+        // Both pins are actively driven (push-pull), bus idles HIGH.
+        pinMode(_clkPin, OUTPUT);
+        pinMode(_dataPin, OUTPUT);
+        digitalWrite(_clkPin, HIGH);
+        digitalWrite(_dataPin, HIGH);
         clearDisplay(0);
         // setIntensity(0, MAX_BRIGHTNESS);
         _brightness = MAX_BRIGHTNESS;
@@ -199,9 +198,9 @@ void LedControl::shutdown(uint8_t addr, bool b)
         uint8_t bri = _brightness >> 1;
         if (!b) bri |= 0x08;
         // Write COMM3 + intensity
-        start();
-        tm1637_writeByte(TM1637_I2C_COMM3 + bri);
-        stop();
+        tm1637_start();
+        tm1637_writeByte(TM1637_I2C_CMD_SETDISPLAY + bri);
+        tm1637_stop();
     }
 }
 
@@ -220,9 +219,9 @@ void LedControl::setIntensity(uint8_t addr, uint8_t intensity)
             intensity |= 0x08;
         }
         // Write COMM3 + intensity
-        start();
-        tm1637_writeByte(TM1637_I2C_COMM3 + intensity);
-        stop();
+        tm1637_start();
+        tm1637_writeByte(TM1637_I2C_CMD_SETDISPLAY + intensity);
+        tm1637_stop();
     }
 }
 
@@ -358,51 +357,67 @@ void LedControl::max72xx_spiTransfer(uint8_t addr, uint8_t opcode, uint8_t data)
 // TM-specific driver methods
 // ------------------------------------------------
 
-void LedControl::start()
+void LedControl::tm1637_start()
 {
-    pinMode(_dataPin, OUTPUT);
-    bitDelay();
+    digitalWrite(_dataPin, HIGH);
+    tm1637_bitDelay();
+    digitalWrite(_clkPin, HIGH);
+    tm1637_bitDelay();
+    digitalWrite(_dataPin, LOW);
+    tm1637_bitDelay();
 }
 
-void LedControl::stop()
+void LedControl::tm1637_stop()
 {
-    pinMode(_dataPin, OUTPUT);
-    bitDelay();
-    pinMode(_clkPin, INPUT);
-    bitDelay();
+    digitalWrite(_clkPin, LOW);
+    tm1637_bitDelay();
+    digitalWrite(_dataPin, LOW);
+    tm1637_bitDelay();
+    digitalWrite(_clkPin, HIGH);
+    tm1637_bitDelay();
+    digitalWrite(_dataPin, HIGH);
+    tm1637_bitDelay();
+}
+
+bool LedControl::tm1637_ack()
+{
+    // After the 8th bit, on the falling edge of the clock
+    // the TM1637 pulls the data line LOW to acknowledge that it has received the byte.
+    //
+    // Note:
+    // It is not possible to change pin mode BEFORE the clock is pulled LOW.
+    digitalWrite(_clkPin, LOW);
     pinMode(_dataPin, INPUT);
-    bitDelay();
+    tm1637_bitDelay();
+
+    digitalWrite(_clkPin, HIGH);
+    tm1637_bitDelay();
+
+    uint8_t ack = digitalRead(_dataPin);
+
+    digitalWrite(_clkPin, LOW);
+    tm1637_bitDelay();
+
+    pinMode(_dataPin, OUTPUT);
+    tm1637_bitDelay();
+    return ack;
 }
 
 bool LedControl::tm1637_writeByte(uint8_t data, bool rvs)
 {
     uint8_t msk = (rvs ? 0x80 : 0x01);
     for (uint8_t i = 0; i < 8; i++) {
-        // CLK low
-        pinMode(_clkPin, OUTPUT);
-        bitDelay();
-        // Set data bit
-        pinMode(_dataPin, (data & msk) ? INPUT : OUTPUT);
-        bitDelay();
-        // CLK high
-        pinMode(_clkPin, INPUT);
-        bitDelay();
+        digitalWrite(_clkPin, LOW);
+        tm1637_bitDelay();
+        digitalWrite(_dataPin, (data & msk) ? HIGH : LOW);
+        tm1637_bitDelay();
+        digitalWrite(_clkPin, HIGH);
+        tm1637_bitDelay();
+
         data = (rvs ? data << 1 : data >> 1);
     }
-    // Wait for acknowledge
-    // CLK to zero
-    pinMode(_clkPin, OUTPUT);
-    pinMode(_dataPin, INPUT);
-    bitDelay();
-    // CLK to high
-    pinMode(_clkPin, INPUT);
-    bitDelay();
-    uint8_t ack = digitalRead(_dataPin);
-    if (ack == 0) pinMode(_dataPin, OUTPUT);
-    bitDelay();
-    pinMode(_clkPin, OUTPUT);
-    bitDelay();
-    return ack;
+
+    return tm1637_ack();
 }
 
 // =========================================================
@@ -414,15 +429,15 @@ void LedControl::tm1637_writeDigits(uint8_t startd, uint8_t len)
     uint8_t b;
 
     // Write COMM1
-    start();
-    tm1637_writeByte(TM1637_I2C_COMM1);
-    stop();
+    tm1637_start();
+    tm1637_writeByte(TM1637_I2C_CMD_SETDATA);
+    tm1637_stop();
 
     uint8_t pos = (_numDigits - 1) - startd;
     b           = (is4Digit ? pos : digitmap[pos + len - 1]);
 
-    start();
-    tm1637_writeByte(TM1637_I2C_COMM2 + b);
+    tm1637_start();
+    tm1637_writeByte(TM1637_I2C_CMD_SETADDRESS + b);
     // Write the data bytes
     if (pos + len > _numDigits) len = _numDigits - pos;
     uint8_t k;
@@ -430,7 +445,7 @@ void LedControl::tm1637_writeDigits(uint8_t startd, uint8_t len)
         k = (is4Digit ? b : len - b - 1);
         tm1637_writeByte(digitBuffer[pos + k], true);
     }
-    stop();
+    tm1637_stop();
 }
 
 #ifdef LEDCONTROL_EXTENDED
