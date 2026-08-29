@@ -21,7 +21,7 @@
     "FirmwareExtension": "uf2",
     "FriendlyName": "Raspberry Pico2",
     "LatestFirmwareVersion": "0.0.1",
-    "MobiFlightType": "MobiFlight RaspiPico2",
+    "MobiFlightType": "MobiFlight RaspiPico2 MCP",
     "ResetFirmwareFile": "reset.raspberry_pico2_1_0_2.uf2",
     "Community": {
       "Project": "MobiFlight",
@@ -201,98 +201,98 @@
       "isAnalog": true,
       "isI2C": false,
       "isPWM": false,
-      "Name": "A2",
+      "Name": "A3",
       "Pin": 102
     },
     {
       "isAnalog": true,
       "isI2C": false,
       "isPWM": false,
-      "Name": "A2",
+      "Name": "A4",
       "Pin": 103
     },
     {
       "isAnalog": true,
       "isI2C": false,
       "isPWM": false,
-      "Name": "A2",
+      "Name": "A5",
       "Pin": 104
     },
     {
       "isAnalog": true,
       "isI2C": false,
       "isPWM": false,
-      "Name": "A2",
+      "Name": "A6",
       "Pin": 105
     },
     {
       "isAnalog": true,
       "isI2C": false,
       "isPWM": false,
-      "Name": "A2",
+      "Name": "A7",
       "Pin": 106
     },
     {
       "isAnalog": true,
       "isI2C": false,
       "isPWM": false,
-      "Name": "A2",
+      "Name": "A8",
       "Pin": 107
     },
     {
       "isAnalog": true,
       "isI2C": false,
       "isPWM": false,
-      "Name": "A2",
+      "Name": "A9",
       "Pin": 108
     },
     {
       "isAnalog": true,
       "isI2C": false,
       "isPWM": false,
-      "Name": "A2",
+      "Name": "A10",
       "Pin": 109
     },
     {
       "isAnalog": true,
       "isI2C": false,
       "isPWM": false,
-      "Name": "A2",
+      "Name": "A11",
       "Pin": 110
     },
     {
       "isAnalog": true,
       "isI2C": false,
       "isPWM": false,
-      "Name": "A2",
+      "Name": "A12",
       "Pin": 111
     },
     {
       "isAnalog": true,
       "isI2C": false,
       "isPWM": false,
-      "Name": "A2",
+      "Name": "A13",
       "Pin": 112
     },
     {
       "isAnalog": true,
       "isI2C": false,
       "isPWM": false,
-      "Name": "A2",
+      "Name": "A14",
       "Pin": 113
     },
     {
       "isAnalog": true,
       "isI2C": false,
       "isPWM": false,
-      "Name": "A2",
+      "Name": "A15",
       "Pin": 114
     },
     {
       "isAnalog": true,
       "isI2C": false,
       "isPWM": false,
-      "Name": "A2",
+      "Name": "A16",
       "Pin": 115
     }
   ]
