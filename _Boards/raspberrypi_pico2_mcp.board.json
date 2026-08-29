@@ -31,7 +31,7 @@
     }
   },
   "ModuleLimits": {
-    "MaxAnalogInputs": 3,
+    "MaxAnalogInputs": 16,
     "MaxInputShifters": 6,
     "MaxButtons": 26,
     "MaxEncoders": 13,
