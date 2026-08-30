@@ -94,7 +94,7 @@ void MFAnalog::readBuffer()
     if (_pin < 8)
         ADC_Buffer[ADC_Average_Pointer] = _mcp1.read(_pin); //_mcp1.readMultiple() required??
     else
-        ADC_Buffer[ADC_Average_Pointer] = _mcp2.read(_pin - 7);
+        ADC_Buffer[ADC_Average_Pointer] = _mcp2.read(_pin - 8);
 #else
     ADC_Buffer[ADC_Average_Pointer] = analogRead(_pin); // store read in, must be subtracted in next loop
 #endif
